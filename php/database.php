@@ -31,9 +31,7 @@ class User{
 		$this->tel = $tel; //string containing the user's telephone number
 		$this->address = $address; //string containing the user's address
 		$this->role = $role; //TBD: object describing the person's role
-		if ($pw!=null) {
-			$this->setPassword($pw);
-		}
+		$this->pw = $pw; //the hashed password of the user
 	}
 
 	/*
