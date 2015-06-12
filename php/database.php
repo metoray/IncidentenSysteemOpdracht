@@ -22,6 +22,8 @@ catch(PDOException $ex){
 
 class User{
 
+	private $authorized = false;
+
 	/*
 	Constructor function to create a new user using the specified parameters.
 	*/
@@ -89,10 +91,19 @@ class User{
 	}
 
 	/*
-	This function returns true if the supplied password matches the set password, false otherwise.
+	This function returns true if the user is logged in.
 	*/
-	public function verifyPassword($pw){
-		return password_verify($pw,$this->pw);
+	public function isAuthorized(){
+		return $this->authorized;
+	}
+
+	/*
+	This function returns true if the supplied password matches the set password, false otherwise.
+	If the password matches this will authorize the user.
+	*/
+	public function authorize($pw){
+		$this->authorized = password_verify($pw,$this->pw);
+		return isAuthorized();
 	}
 
 	/*
@@ -132,12 +143,17 @@ class User{
 	*/
 	public static function fromName($name){
 		global $db;
-		$stmt = $db -> prepare("SELECT * FROM gebruikers WHERE naam = :name");
-		$stmt -> bindValue(':name', $name, PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt -> fetch();
-		$role = null;	//needs improvement
-		return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$role,$row['wachtwoord'],$row['gebruiker_id']);
+		try{
+			$stmt = $db -> prepare("SELECT * FROM gebruikers WHERE naam = :name");
+			$stmt -> bindValue(':name', $name, PDO::PARAM_STR);
+			$stmt->execute();
+			$row = $stmt -> fetch();
+			$role = null;	//needs improvement
+			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$role,$row['wachtwoord'],$row['gebruiker_id']);
+		}
+		catch(PDOException $ex){
+			die($ex->getMessage());
+		}
 	}
 
 }
@@ -148,8 +164,10 @@ $user -> setPassword("hunter2");
 $user -> save();
 $user = User::fromName("test1");
 print lines($user -> getName(),$user -> getDept(),$user -> getAddress(),$user -> getTelephone());
-print "\n<br>".(($user->verifyPassword("hunter2"))?"true":"false");
-print "\n<br>".(($user->verifyPassword("*******"))?"true":"false");
+print "\n<br>".(($user->authorize("hunter2"))?"true":"false");
+print "\n<br>".(($user->authorize("*******"))?"true":"false");
+$user->authorize("hunter2");
+print "\n<br>".(($user->isAuthorized())?"true":"false");
 
 ?>
 </body>
