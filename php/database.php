@@ -148,6 +148,8 @@ $user -> setPassword("hunter2");
 $user -> save();
 $user = User::fromName("test1");
 print lines($user -> getName(),$user -> getDept(),$user -> getAddress(),$user -> getTelephone());
+print "\n<br>".(($user->verifyPassword("hunter2"))?"true":"false");
+print "\n<br>".(($user->verifyPassword("*******"))?"true":"false");
 
 ?>
 </body>
