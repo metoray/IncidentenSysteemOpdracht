@@ -13,6 +13,7 @@ require('util.php');
 
 try{
 	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', 'site', 'site');
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch(PDOException $ex){
 	die($ex->getMessage());
@@ -99,18 +100,30 @@ class User{
 	*/
 	public function save(){
 		global $db;
-		if($this->id==null){
-			$stmt = $db -> prepare("INSERT INTO gebruikers (naam,afdeling,telefoon,adres,wachtwoord,rol_id) VALUES (:name,:dept,:tel,:address,:pw,:role)");
-			$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
-			$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
-			$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
-			$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
-			$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
-			$stmt -> bindValue(':role', $this->role->getId(), PDO::PARAM_INT);
-			$stmt->execute();
+		try{
+			if($this->id==null){
+				$stmt = $db -> prepare("INSERT INTO gebruikers (naam,afdeling,telefoon,adres,wachtwoord,rol_id) VALUES (:name,:dept,:tel,:address,:pw,:role)");
+				$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
+				$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
+				$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
+				$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
+				$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
+				$stmt -> bindValue(':role', null, PDO::PARAM_INT);
+				$stmt->execute();
+			}
+			else{
+				$stmt = $db -> prepare("UPDATE gebruikers SET naam=:name, afdeling=:dept, telefoon=:tel,adres=:address,wachtwoord=:pw,rol_id=:role WHERE id=:id");
+				$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
+				$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
+				$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
+				$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
+				$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
+				$stmt -> bindValue(':role', null, PDO::PARAM_INT);
+				$stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+			}
 		}
-		else{
-
+		catch(PDOException $ex){
+			die($ex->getMessage());
 		}
 	}
 
@@ -130,7 +143,10 @@ class User{
 }
 
 //TEST CODE; REMOVE LATER
-$user = User::fromName("Gebruiker1");
+$user = new User("test1","testing","1234567","testlaan 1337",null);
+$user -> setPassword("hunter2");
+$user -> save();
+$user = User::fromName("test1");
 print lines($user -> getName(),$user -> getDept(),$user -> getAddress(),$user -> getTelephone());
 
 ?>
