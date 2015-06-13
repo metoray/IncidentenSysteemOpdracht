@@ -96,11 +96,12 @@ class User{
 	*/
 	public function authorize($pw){
 		$this->authorized = password_verify($pw,$this->pw);
-		return isAuthorized();
+		return $this->isAuthorized();
 	}
 
 	/*
 	This function inserts a row for the user if the user is new.
+	If the user is not new this function will change the user's data.
 	*/
 	public function save(){
 		global $db;
@@ -124,6 +125,7 @@ class User{
 				$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
 				$stmt -> bindValue(':role', null, PDO::PARAM_INT);
 				$stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+				$stmt -> execute();
 			}
 		}
 		catch(PDOException $ex){
@@ -151,6 +153,49 @@ class User{
 
 }
 
+class Role{
+
+	static $roles = array();
+
+	public function __construct($id){
+		global $db;
+		try{
+			$stmt = $db -> prepare("SELECT naam FROM rol WHERE id = :id;");
+			$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt -> fetch();
+
+			$this->name = $row['naam'];
+
+			$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
+									JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
+									WHERE RBR.rol_id = :id;");
+			$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+			$stmt->execute();
+
+			$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
+		}
+		catch(PDOException $ex){
+			die($ex->getMessage());
+		}
+	}
+
+	/*
+	Get role from id.
+	*/
+	public static function fromID($id){
+		if(array_key_exists($id, $roles)){
+			return $roles[$id];
+		}
+		else{
+			$role = new Role($id);
+			$roles[$id] = $role;
+			return $role;
+		}
+	}
+
+}
+/*
 //TEST CODE; REMOVE LATER
 $user = new User("test1","testing","1234567","testlaan 1337",null);
 $user -> setPassword("hunter2");
@@ -161,6 +206,14 @@ print "\n<br>".(($user->authorize("hunter2"))?"true":"false");
 print "\n<br>".(($user->authorize("*******"))?"true":"false");
 $user->authorize("hunter2");
 print "\n<br>".(($user->isAuthorized())?"true":"false");
+
+print "<br>====START ROLE TEST====<br>";
+$role = new Role(2);
+print $role->name;
+print "<br>";
+print_r($role->rights);
+print "<br>====END ROLE TEST====<br>";
+*/
 
 ?>
 </body>
