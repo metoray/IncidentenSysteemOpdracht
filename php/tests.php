@@ -1,5 +1,6 @@
 <?php
-include 'database.php';
+require_once 'database.php';
+require_once 'util.php';
 
 class Test {
 
@@ -21,17 +22,32 @@ $tests = array();
 $tests[] = new Test("Check password",
 function(){
 	$user = new User("auth-test","test-dept","(06)1234567","testlaan 1337",null);
-	$user -> setPassword("hunter2");
+	$user -> setPassword("password");
 	$user -> save();
 	$user = User::fromName("auth-test");
-	return $user -> authorize("hunter2");
+	return $user -> authorize("password");
 },true
+);
+
+$tests[] = new Test("Check wrong password",
+function(){
+	$user = new User("auth-test2","test-dept","(06)1234567","testlaan 1337",null);
+	$user -> setPassword("password");
+	$user -> save();
+	$user = User::fromName("auth-test2");
+	return $user -> authorize("wrong-password");
+},false
 );
 ?>
 
 <html>
 	<head>
 		<title>Tests</title>
+		<style type="text/css">
+			td {
+				border: double black;
+			}
+		</style>
 	</head>
 	<body>
 		<table>
@@ -53,7 +69,9 @@ function(){
 foreach($tests as $test){
 	$results = $test->getResults();
 	$color = $results[3]?"green":"red";
-	echo "<tr style=\"background: {$color};\"><td>{$results[0]}</td><td>{$results[1]}</td><td>{$results[2]}</td></tr>";
+	$result = str($results[1]);
+	$expected = str($results[2]);
+	echo "<tr style=\"background: {$color};\"><td>{$results[0]}</td><td>{$result}</td><td>{$expected}</td></tr>";
 }
 				?>
 			</tbody>
