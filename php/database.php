@@ -155,8 +155,12 @@ class User{
 
 class Role{
 
+	//list of roles in database, is added-to when needed
 	static $roles = array();
 
+	/*
+	constructor for role, required data is retrieved from the database.
+	*/
 	public function __construct($id){
 		global $db;
 		try{
@@ -185,10 +189,10 @@ class Role{
 	*/
 	public static function fromID($id){
 		if(array_key_exists($id, $roles)){
-			return $roles[$id];
+			return $roles[$id]; //role is in array, return this
 		}
 		else{
-			$role = new Role($id);
+			$role = new Role($id); //role is not in array, add to array and return
 			$roles[$id] = $role;
 			return $role;
 		}
@@ -197,16 +201,6 @@ class Role{
 }
 /*
 //TEST CODE; REMOVE LATER
-$user = new User("test1","testing","1234567","testlaan 1337",null);
-$user -> setPassword("hunter2");
-$user -> save();
-$user = User::fromName("test1");
-print lines($user -> getName(),$user -> getDept(),$user -> getAddress(),$user -> getTelephone());
-print "\n<br>".(($user->authorize("hunter2"))?"true":"false");
-print "\n<br>".(($user->authorize("*******"))?"true":"false");
-$user->authorize("hunter2");
-print "\n<br>".(($user->isAuthorized())?"true":"false");
-
 print "<br>====START ROLE TEST====<br>";
 $role = new Role(2);
 print $role->name;
