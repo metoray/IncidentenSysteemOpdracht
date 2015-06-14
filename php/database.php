@@ -20,14 +20,16 @@ class User{
 	/*
 	Constructor function to create a new user using the specified parameters.
 	*/
-	function __construct($name,$dept,$tel,$address,$role,$pw=null,$id=null){
+	function __construct($name,$dept,$tel,$address,$roleID,$pw=null,$id=null){
 		$this->id = $id; //id of the user, should be null for new users
 		$this->name = $name; //string containing username
 		$this->dept = $dept; //string naming the user's department
 		$this->tel = $tel; //string containing the user's telephone number
 		$this->address = $address; //string containing the user's address
-		$this->role = $role; //TBD: object describing the person's role
+		$this->roleID = $roleID;
 		$this->pw = $pw; //the hashed password of the user
+
+		$this->role = null;
 	}
 
 	/*
@@ -76,6 +78,9 @@ class User{
 	}
 
 	public function getRole(){
+		if($this->role == null){
+			$this->role = new Role($this->roleID);
+		}
 		return $this->role;
 	}
 
@@ -107,26 +112,47 @@ class User{
 		global $db;
 		try{
 			if($this->id==null){
-				$stmt = $db -> prepare("INSERT INTO gebruikers (naam,afdeling,telefoon,adres,wachtwoord,rol_id) VALUES (:name,:dept,:tel,:address,:pw,:role)");
-				$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
-				$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
-				$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
-				$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
-				$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
-				$stmt -> bindValue(':role', null, PDO::PARAM_INT);
-				$stmt->execute();
+				$stmt = $db -> prepare("INSERT INTO gebruikers (naam,afdeling,telefoon,adres,wachtwoord,rol_id) VALUES (:name,:dept,:tel,:address,:pw,:role);");
 			}
 			else{
-				$stmt = $db -> prepare("UPDATE gebruikers SET naam=:name, afdeling=:dept, telefoon=:tel,adres=:address,wachtwoord=:pw,rol_id=:role WHERE id=:id");
-				$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
-				$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
-				$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
-				$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
-				$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
-				$stmt -> bindValue(':role', null, PDO::PARAM_INT);
-				$stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
-				$stmt -> execute();
+				$stmt = $db -> prepare("UPDATE gebruikers SET naam=:name, afdeling=:dept, telefoon=:tel,adres=:address,wachtwoord=:pw,rol_id=:role WHERE id=:id;");
 			}
+			$stmt -> bindValue(':name', $this->name, PDO::PARAM_STR);
+			$stmt -> bindValue(':dept', $this->dept, PDO::PARAM_STR);
+			$stmt -> bindValue(':tel', $this->tel, PDO::PARAM_STR);
+			$stmt -> bindValue(':address', $this->address, PDO::PARAM_STR);
+			$stmt -> bindValue(':pw', $this->pw, PDO::PARAM_STR);
+
+			if($this->role == null){
+				$stmt -> bindValue(':role', $this->roleID, PDO::PARAM_INT);
+			}
+			else{
+				$stmt -> bindValue(':role', $this->role -> getID(), PDO::PARAM_INT);
+			}
+
+			$stmt -> execute();
+
+			if($this->id == null){
+				$this->id = $db -> lastInsertId();
+			}
+
+		}
+		catch(PDOException $ex){
+			return $ex -> getMessage();
+		}
+		return false;
+	}
+
+	/*
+	Function to delete this user.
+	WARNING: THIS IS NOT RECOVERABLE
+	*/
+	public function delete(){
+		global $db;
+		try{
+			$stmt = $db -> prepare("DELETE FROM gebruikers WHERE gebruiker_id = :id;");
+			$stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+			$stmt -> execute();
 		}
 		catch(PDOException $ex){
 			die($ex->getMessage());
@@ -143,11 +169,13 @@ class User{
 			$stmt -> bindValue(':name', $name, PDO::PARAM_STR);
 			$stmt->execute();
 			$row = $stmt -> fetch();
-			$role = null;	//needs improvement
-			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$role,$row['wachtwoord'],$row['gebruiker_id']);
+			if(!$row){
+				return "USER DOES NOT EXIST";
+			}
+			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$row['rol'],$row['wachtwoord'],$row['gebruiker_id']);
 		}
 		catch(PDOException $ex){
-			die($ex->getMessage());
+			return $ex->getMessage();
 		}
 	}
 
@@ -161,23 +189,46 @@ class Role{
 	/*
 	constructor for role, required data is retrieved from the database.
 	*/
-	public function __construct($id){
+	public function __construct($idorname){
 		global $db;
 		try{
-			$stmt = $db -> prepare("SELECT naam FROM rol WHERE id = :id;");
-			$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-			$stmt->execute();
-			$row = $stmt -> fetch();
+			if(is_int($idorname)){
+				$this->id = $idorname;
 
-			$this->name = $row['naam'];
+				$stmt = $db -> prepare("SELECT naam FROM rol WHERE id = :id;");
+				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt -> fetch();
 
-			$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
-									JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
-									WHERE RBR.rol_id = :id;");
-			$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-			$stmt->execute();
+				$this->name = $row['naam'];
 
-			$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
+				$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
+										JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
+										WHERE RBR.rol_id = :id;");
+				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
+				$stmt->execute();
+
+				$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
+			}
+			else{
+				$this->name = $idorname;
+
+				$stmt = $db -> prepare("SELECT id FROM rol WHERE naam = :name;");
+				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt -> fetch();
+
+				$this->id = $row['id'];
+
+				$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
+										JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
+										JOIN rol ON (rol.id = RBR.rol_id)
+										WHERE rol.naam = :name;");
+				$stmt->bindValue(':name', $idorname, PDO::PARAM_STR);
+				$stmt->execute();
+
+				$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
+			}
 		}
 		catch(PDOException $ex){
 			die($ex->getMessage());

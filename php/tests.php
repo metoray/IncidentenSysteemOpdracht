@@ -19,23 +19,42 @@ class Test {
 
 $tests = array();
 
-$tests[] = new Test("Check password",
+$tests[] = new Test("Create user",
 function(){
-	$user = new User("auth-test","test-dept","(06)1234567","testlaan 1337",null);
+	$user = new User("test-create-user","test-dept","(06)1234567","testlaan 1337",1);
+	$user -> setPassword("password");
+	$error = $user -> save();
+	$user = User::fromName("test-create-user");
+	$result = $user -> getName();
+	$user -> delete();
+	if($error){
+		return $error;
+	}
+	return $result;
+},"test-create-user"
+);
+
+$tests[] = new Test("Auth. with correct pw",
+function(){
+	$user = new User("test-auth-user","test-dept","(06)1234567","testlaan 1337",1);
 	$user -> setPassword("password");
 	$user -> save();
-	$user = User::fromName("auth-test");
-	return $user -> authorize("password");
+	$user = User::fromName("test-auth-user");
+	$result = $user -> authorize("password");
+	$user -> delete();
+	return $result;
 },true
 );
 
-$tests[] = new Test("Check wrong password",
+$tests[] = new Test("Auth. with wrong pw",
 function(){
-	$user = new User("auth-test2","test-dept","(06)1234567","testlaan 1337",null);
+	$user = new User("test-auth-user","test-dept","(06)1234567","testlaan 1337",1);
 	$user -> setPassword("password");
 	$user -> save();
-	$user = User::fromName("auth-test2");
-	return $user -> authorize("wrong-password");
+	$user = User::fromName("test-auth-user");
+	$result = $user -> authorize("wrong-password");
+	$user -> delete();
+	return $result;
 },false
 );
 ?>
@@ -74,6 +93,7 @@ foreach($tests as $test){
 	echo "<tr style=\"background: {$color};\"><td>{$results[0]}</td><td>{$result}</td><td>{$expected}</td></tr>";
 }
 				?>
+				<tr><td colspan=3>ALL TESTS COMPLETED</td></tr>
 			</tbody>
 		</table>
 	</body>
