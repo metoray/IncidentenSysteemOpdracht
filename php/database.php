@@ -79,13 +79,21 @@ class User{
 
 	public function getRole(){
 		if($this->role == null){
-			$this->role = new Role($this->roleID);
+			$id = (int)($this->roleID);
+			$this->role = new Role($id);
 		}
 		return $this->role;
 	}
 
 	public function setRole($role){
 		$this->role = $role;
+	}
+
+	public function hasRight($right){
+		if(!$this->isAuthorized()){
+			return false;
+		}
+		return $this->getRole()->hasRight($right);
 	}
 
 	/*
@@ -172,7 +180,7 @@ class User{
 			if(!$row){
 				return "USER DOES NOT EXIST";
 			}
-			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$row['rol'],$row['wachtwoord'],$row['gebruiker_id']);
+			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$row['rol_id'],$row['wachtwoord'],$row['gebruiker_id']);
 		}
 		catch(PDOException $ex){
 			return $ex->getMessage();
@@ -185,6 +193,8 @@ class Role{
 
 	//list of roles in database, is added-to when needed
 	static $roles = array();
+	//list of rights
+	static $rights = array();
 
 	/*
 	constructor for role, required data is retrieved from the database.
@@ -193,22 +203,17 @@ class Role{
 		global $db;
 		try{
 			if(is_int($idorname)){
+
 				$this->id = $idorname;
 
 				$stmt = $db -> prepare("SELECT naam FROM rol WHERE id = :id;");
 				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
 				$stmt->execute();
 				$row = $stmt -> fetch();
+				if(!$row) return null;
 
 				$this->name = $row['naam'];
 
-				$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
-										JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
-										WHERE RBR.rol_id = :id;");
-				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
-				$stmt->execute();
-
-				$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
 			}
 			else{
 				$this->name = $idorname;
@@ -217,22 +222,37 @@ class Role{
 				$stmt->bindValue(':id', $idorname, PDO::PARAM_INT);
 				$stmt->execute();
 				$row = $stmt -> fetch();
+				if(!$row) return null;
 
 				$this->id = $row['id'];
-
-				$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
-										JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
-										JOIN rol ON (rol.id = RBR.rol_id)
-										WHERE rol.naam = :name;");
-				$stmt->bindValue(':name', $idorname, PDO::PARAM_STR);
-				$stmt->execute();
-
-				$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
 			}
+
+			$stmt = $db -> prepare("SELECT recht.beschrijving FROM recht
+									JOIN recht_bij_rol AS RBR ON (RBR.recht_id = recht.id)
+									WHERE RBR.rol_id = :id;");
+			$stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$stmt->execute();
+
+			$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
+			array_merge(Role::$rights,$this->right);
 		}
 		catch(PDOException $ex){
 			die($ex->getMessage());
 		}
+	}
+
+	/*
+	Get role name.
+	*/
+	public function getName(){
+		return $this->name;
+	}
+
+	/*
+	Check if the role contains a certain right.
+	*/
+	public function hasRight($right){
+		return in_array($right,$this->rights);
 	}
 
 	/*
@@ -250,16 +270,6 @@ class Role{
 	}
 
 }
-/*
-//TEST CODE; REMOVE LATER
-print "<br>====START ROLE TEST====<br>";
-$role = new Role(2);
-print $role->name;
-print "<br>";
-print_r($role->rights);
-print "<br>====END ROLE TEST====<br>";
-*/
-
 ?>
 </body>
 </html>

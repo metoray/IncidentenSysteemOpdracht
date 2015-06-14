@@ -12,7 +12,7 @@ class Test {
 
 	public function getResults(){
 		$result = call_user_func_array($this->func, array());
-		$success = $result == $this->expected;
+		$success = $result === $this->expected;
 		return array($this->name,$result,$this->expected,$success);
 	}
 }
@@ -56,6 +56,57 @@ function(){
 	$user -> delete();
 	return $result;
 },false
+);
+
+$tests[] = new Test("Retrieve role from DB",
+function(){
+	$role = Role::fromID(2);
+	return $role -> getName();
+},"IncidentManager"
+);
+
+$tests[] = new Test("Role has right",
+function(){
+	$role = Role::fromID(2);
+	return $role -> hasRight("PROCESS_TICKET");
+},true
+);
+
+$tests[] = new Test("Role from user",
+function(){
+	$user = new User("test-role-user","test-dept","(06)1234567","testlaan 1337",1);
+	$user -> setPassword("password");
+	$user -> save();
+	$user = User::fromName("test-role-user");
+	$result = $user -> getRole() -> getName();
+	$user -> delete();
+	return $result;
+},"Customer"
+);
+
+$tests[] = new Test("Unauthorized user has no rights",
+function(){
+	$user = new User("test-right-user","test-dept","(06)1234567","testlaan 1337",1);
+	$user -> setPassword("password");
+	$user -> save();
+	$user = User::fromName("test-right-user");
+	$result = $user -> hasRight("CREATE_TICKET");
+	$user -> delete();
+	return $result;
+},false
+);
+
+$tests[] = new Test("Unauthorized user has rights",
+function(){
+	$user = new User("test-right-user","test-dept","(06)1234567","testlaan 1337",1);
+	$user -> setPassword("password");
+	$user -> save();
+	$user = User::fromName("test-right-user");
+	$user -> authorize("password");
+	$result = $user -> hasRight("CREATE_TICKET");
+	$user -> delete();
+	return $result;
+},true
 );
 ?>
 
