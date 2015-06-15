@@ -108,6 +108,13 @@ function(){
 	return $result;
 },true
 );
+
+$tests[] = new Test("Get hardware by id",
+function(){
+	$hardware = new hardware(5);
+	return $hardware -> kind;
+},"werkstation"
+);
 ?>
 
 <html>

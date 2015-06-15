@@ -270,6 +270,34 @@ class Role{
 	}
 
 }
+
+class Hardware{
+
+	public function __construct($arg){
+		global $db;
+		if(is_numeric($arg)){
+			$stmt = $db -> prepare("SELECT * FROM hardwarecomponenten JOIN soort_hardware ON (hardwarecomponenten.soort_id = soort_hardware.soort_h_id) WHERE hardware_id = :id;");
+			$stmt -> bindValue('id', $arg, PDO::PARAM_INT);
+		}
+		else{
+			$stmt = $db -> prepare("SELECT * FROM hardwarecomponenten JOIN soort_hardware ON (hardwarecomponenten.soort_id = soort_hardware.soort_h_id) WHERE identificationcode = :id_code;");
+			$stmt -> bindValue('id_code', $arg, PDO::PARAM_STR);
+		}
+		$stmt -> execute();
+		$row = $stmt -> fetch();
+		if(!row) return null;
+
+		$this->id = $row['hardware_id'];
+		$this->id_code = $row['identificationcode'];
+		$this->kind = $row['beschrijving'];
+		$this->location_id = $row['locatie_id'];
+		$this->brand_id = $row['merk_id'];
+		$this->supplier_id = $row['leverancier_id'];
+		$this->year = $row['jaar_van_aanschaf'];
+	}
+
+}
+
 ?>
 </body>
 </html>
