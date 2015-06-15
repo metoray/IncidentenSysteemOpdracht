@@ -96,7 +96,7 @@ function(){
 },false
 );
 
-$tests[] = new Test("Unauthorized user has rights",
+$tests[] = new Test("Authorized user has rights",
 function(){
 	$user = new User("test-right-user","test-dept","(06)1234567","testlaan 1337",1);
 	$user -> setPassword("password");
