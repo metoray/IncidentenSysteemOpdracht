@@ -296,6 +296,20 @@ class Hardware{
 		$this->year = $row['jaar_van_aanschaf'];
 	}
 
+	public function install($software_id){
+		$stmt = $db -> prepare("DELETE FROM installatie WHERE hardware_id = :hwid AND software_id = :soft_id");
+		$stmt -> bindValue('hwid', $this->id, PDO::PARAM_INT);
+		$stmt -> bindValue('soft_id',$software_id);
+		$stmt -> execute();
+	}
+
+	public function uninstall($software_id){
+		$stmt = $db -> prepare("INSERT INTO installatie VALUES (:hwid,:soft_id);");
+		$stmt -> bindValue('hwid', $this->id, PDO::PARAM_INT);
+		$stmt -> bindValue('soft_id',$software_id);
+		$stmt -> execute();
+	}
+
 }
 
 ?>

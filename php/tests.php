@@ -127,6 +127,7 @@ function(){
 		</style>
 	</head>
 	<body>
+		<h1>Database interface tests</h1>
 		<table>
 			<thead>
 				<tr>
