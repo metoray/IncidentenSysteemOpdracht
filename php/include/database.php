@@ -1,9 +1,4 @@
-<html>
-<head></head>
-<body>
 <?php
-require_once 'include/util.php';
-
 try{
 	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', 'site', 'site');
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -178,12 +173,13 @@ class User{
 			$stmt->execute();
 			$row = $stmt -> fetch();
 			if(!$row){
-				return "USER DOES NOT EXIST";
+				return null;
 			}
 			return new User($row['naam'],$row['afdeling'],$row['telefoon'],$row['adres'],$row['rol_id'],$row['wachtwoord'],$row['gebruiker_id']);
 		}
 		catch(PDOException $ex){
-			return $ex->getMessage();
+			error_log($ex);
+			return null;
 		}
 	}
 
@@ -313,5 +309,3 @@ class Hardware{
 }
 
 ?>
-</body>
-</html>
