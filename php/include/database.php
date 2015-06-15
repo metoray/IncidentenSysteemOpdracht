@@ -285,7 +285,7 @@ class Hardware{
 		}
 		$stmt -> execute();
 		$row = $stmt -> fetch();
-		if(!row) return null;
+		if(!$row) return null;
 
 		$this->id = $row['hardware_id'];
 		$this->id_code = $row['identificationcode'];
