@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>?</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('.tree-toggler').click(function () {
+				$(this).parent().children('ul.tree').toggle(100);
+			});
+			$('ul.tree').each(function(idx){
+				if($(this).find('li.active').length==0){
+					$(this).toggle();
+				};
+			});
+		});
+	</script>
+	<style type="text/css">
+	.tree {
+		margin-left: 16px !important;
+	}
+	</style>
+</head>
+<body>
+	<div class="col-md-2">
+		<ul class="nav nav-pills nav-stacked">
+			<li role="presentation"><a href="#">Home</a></li>
+			<li role="presentation"><a href="#">Mijn incidenten</a></li>
+			<li role="presentation">
+				<a href="#" class="tree-toggler">Incidenten<span class="caret"></span></a>
+				<ul class="nav nav-pills nav-stacked tree">
+					<li role="presentation"><a href="#">Toegewezen aan mij</a></li>
+					<li role="presentation"><a href="#">Alle incidenten</a></li>
+				</ul>
+			</li>
+			<li role="presentation">
+				<a href="#" class="tree-toggler">Problemen<span class="caret"></span></a>
+				<ul class="nav nav-pills nav-stacked tree">
+					<li class="active" role="presentation"><a href="#">Nieuw probleem</a></li>
+					<li role="presentation"><a href="#">Alle problemen</a></li>
+				</ul>
+			</li>
+			<li role="presentation">
+				<a href="#" class="tree-toggler">Configuratie beheer<span class="caret"></span></a>
+				<ul class="nav nav-pills nav-stacked tree">
+					<li role="presentation"><a href="#">Hardware</a></li>
+					<li role="presentation"><a href="#">Software</a></li>
+					<li role="presentation"><a href="#">Installatie</a></li>
+					<li role="presentation"><a href="#">Verbindingen</a></li>
+					<li role="presentation"><a href="#">Q&A Beheer</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
