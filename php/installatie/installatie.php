@@ -14,46 +14,64 @@ $sis_step3 = mysql_fetch_row($sis_step2);
 // Er zou maar 1 resultaat van moeten komen. 
 
 
+
+
+?>
+	<style>
+	label,a 
+	{
+		font-family : Arial, Helvetica, sans-serif;
+		font-size : 12px; 
+	}
+		
+	</style>
+	<form action="installatie.php" method="post" name="installatie">
+	<select size ="30"  name="geinstalleerd">
+        	
+<?php	
+	
+	$installed = array();
+	echo "<br />";
+	
 /* Nu gaan we alle rows achterhalen waar er iets is geinstalleerd op deze hardwarecomponent.
 s=search a= all hardware s=and software*/
-echo "<br />";
-$sas_step1 = "select * from installatie where hardware_id = ".$sis_step3[0]." ";
-
-$sas_step2 = mysql_query($sas_step1);
-echo "<br />";
-
-		?>
-        	<style>
-			label,a 
-			{
-				font-family : Arial, Helvetica, sans-serif;
-				font-size : 12px; 
-			}
-		
-			</style>
-			<form action="installatie.php" method="post" name="installatie">
-			<select size ="30"  name="geinstalleerd">
-        	
-			<?php	
-
-while($row = mysql_fetch_assoc($sas_step2)) 
-		{
-		 
-        	//Nu moeten we zoeken naar de naam van het programma.
-        	// spn = search program name 
-        	$spn_step1 = "select identificatiecode, beschrijving from software stw , soort_software ssd where software_id = ".$row["software_id"]." and stw.soort_id = ssd.soort_s_id ";
-        	$spn_step2 = mysql_query($spn_step1);
-			$spn_step3 = mysql_fetch_row($spn_step2);
+	$sas_step1 = "select * from installatie where hardware_id = ".$sis_step3[0]." ";
+	$sas_step2 = mysql_query($sas_step1);
+	echo "<br />";
+	while($row = mysql_fetch_assoc($sas_step2)) 
+	{ 
+    	//Nu moeten we zoeken naar de naam van het programma.
+        // spn = search program name 
+        $spn_step1 = "select identificatiecode, beschrijving from software stw , soort_software ssd where software_id = ".$row["software_id"]." and stw.soort_id = ssd.soort_s_id ";
+        $spn_step2 = mysql_query($spn_step1);
+		$spn_step3 = mysql_fetch_row($spn_step2);
 			
-        	?>
-        	<option value = "program 1" > 
-			<?php echo $spn_step3[0]; ?>  Beschrijving: <?php echo $spn_step3[1]; ?>   
-			</option>
-        	<?php
-        };
-        echo "</select> ";
-       	echo "<br />";
-       	?> 
-       
-		<input type="submit" name="remove_program" value = "'     >       '">
+        ?>
+        <option value = <?php echo $spn_step3[0]; ?> > 
+        	
+		<?php echo $spn_step3[0]; ?>  Beschrijving: <?php echo $spn_step3[1]; ?>   
+		</option>
+        <?php
+        array_push($installed, $spn_step3[0]);
+    };
+    echo "</select> ";
+    echo "<br />";
+?>     
+	<input type="submit" name="remove_program" value = "'     >       '">
+<?php
+	//not installed query
+	$niq_step1 = "select identificatiecode,beschrijving from software stw , soort_software ssd where  stw.soort_id = ssd.soort_s_id";
+	foreach($installed as $program)
+	{
+		$not = " and !(identificatiecode = '".$program."' )";
+		$niq_step1 = $niq_step1.$not;
+	};
+	echo "<br />";
+	echo $niq_step1;
+	$nig_step2 = mysql_query($nig_step1);
+	while($row2 = mysql_fetch_assoc($nig_step2))
+	{
+		echo "test";
+	};
+?>
 		
