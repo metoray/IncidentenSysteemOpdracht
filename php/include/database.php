@@ -308,4 +308,68 @@ class Hardware{
 
 }
 
+class Page{
+
+	public function __construct($id,$title,$file){
+		$this->id = $id;
+		$this->title = $title;
+		$this->file = $file;
+		$this->subPages = array();
+	}
+
+	public function getID(){
+		return $this->id;
+	}
+
+	public function getTitle(){
+		return $this->title;
+	}
+
+	public function getFile(){
+		return $this->file;
+	}
+
+	public function addSubpage($key,$page){
+		$this->subPages[$key] = $page;
+	}
+
+	public function hasSubpages(){
+		return !empty($this->subPages);
+	}
+
+	public static function getPageStructure(){
+		global $db;
+
+		$pageList = array(); //an assoc array of assoc arrays indexed by super key and key
+		$flat = array(); //an assoc array of pages
+		$query = "SELECT page.id, page.titel, page.file, page.sleutel, super.sleutel AS super FROM pagina page LEFT JOIN pagina super ON super.id = page.bovenliggende_pagina_id ORDER BY page.volgorde;";
+		foreach ($db->query($query) as $row) {
+			$superKey = $row['super'];
+			if(!array_key_exists($superKey, $pageList)){
+				$pageList[$superKey] = array();
+			}
+			$page = new Page($row['id'],$row['titel'],$row['file']);
+			$pageList[$superKey][$row['sleutel']] = $page;
+			$flat[$row['sleutel']] = $page;
+    	}
+    	$root = new Page(null,null,null);
+    	if(!array_key_exists(null, $pageList)){
+    		return $root;		//no root tag present
+    	}
+    	foreach ($pageList[null] as $key => $page) {
+    		$root -> addSubpage($key,$page);
+    	}
+    	unset($pageList[null]);
+    	foreach ($pageList as $superKey => $pages) {
+    		if(array_key_exists($superKey, $flat)){
+    			foreach ($pages as $key => $page) {
+    				$flat[$superKey] -> addSubpage($key,$page);
+    			}
+    		}
+    	}
+    	return $root;
+	}
+
+}
+
 ?>
