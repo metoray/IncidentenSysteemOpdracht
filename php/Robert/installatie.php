@@ -3,7 +3,6 @@
 Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort te achterhalen.
 
 s= search = i=hardware_id s=select  */
-error_reporting(0);
 include "connect.php";
 $identification_code = "BRG003";
 echo "<br >";
@@ -14,15 +13,15 @@ $sis_step2 = mysql_query($sis_step1);
 $sis_step3 = mysql_fetch_row($sis_step2);
 // Er zou maar 1 resultaat van moeten komen. 
 
-//Dit verwerkt een post als die er is. Het moet na de sis_set3 komen zodat de goed query's goed uitgevoerd kunnen worden.
+//Dit verwerkt een post als die er is. Het moet na de sis_set3 komen zodat de goede hardware_id kan worden gebruikt.
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-	if(!$_POST["verwijder_van_installatie"]=="")
+	if(isset($_POST["verwijder_van_installatie"]))
 	{
 	 	$query = "delete from installatie where hardware_id = '".$sis_step3[0]."' and software_id = ".$_POST["verwijder_van_installatie"]." ";
 		mysql_query($query);
 	}
-	if(!$_POST["voegtoe_aan_installatie"]=="")
+	if(isset($_POST["voegtoe_aan_installatie"]))
 	{
 		$query = "insert into installatie(hardware_id, software_id) VALUES (".$sis_step3[0]." , ".$_POST["voegtoe_aan_installatie"]." )";
 		mysql_query($query);
@@ -30,12 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 };
 
 ?>
+	<!-- CSS zodat de select menuën naast elkaar staan. -->
 	<style>
-	label,a 
-	{
-		font-family : Arial, Helvetica, sans-serif;
-		font-size : 12px; 
-	}
+
 
 	form
  	{
