@@ -1,4 +1,8 @@
 <?php
+include(dirname(dirname(__FILE__)).'/lib/password.php'); //ugh
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 try{
 	list($user, $pw) = explode(':',file_get_contents(dirname(__FILE__)."/db.cfg"));
 	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', $user, $pw);

@@ -128,6 +128,7 @@ function(){
 	</head>
 	<body>
 		<h1>Database interface tests</h1>
+		Using php version <?php echo phpversion() ?>
 		<table>
 			<thead>
 				<tr>
