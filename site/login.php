@@ -1,3 +1,8 @@
+<?php
+	if(!isset($username)){
+		$username = "";
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +21,7 @@
 		<div class="well well-md" style="margin-top: 100px;">
 			<form action="/process/login.php" method="post">
 				<div class="form-group">
-					<input type="text" class="form-control" name="username" value="<?php echo $_POST['username']; ?>" placeholder="Gebruikersnaam"/>
+					<input type="text" class="form-control" name="username" value="<?php echo $username;?>" placeholder="Gebruikersnaam"/>
 				</div>
 				<div class="form-group">
 					<input type="password" class="form-control" name="password" placeholder="Wachtwoord"/>

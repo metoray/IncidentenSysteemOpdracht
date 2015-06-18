@@ -2,8 +2,9 @@
 require_once '../include/database.php';
 
 session_start();
-$username = $_POST['username'];
-$password = $_POST['password'];
+
+$username = isset($_POST['username'])?$_POST['username']:"";
+$password = isset($_POST['password'])?$_POST['password']:"";
 
 $user = User::fromName($username);
 if($user){
