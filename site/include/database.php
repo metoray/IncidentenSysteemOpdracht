@@ -1,6 +1,7 @@
 <?php
 try{
-	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', 'site', 'site');
+	list($user, $pw) = explode(':',file_get_contents(dirname(__FILE__)."/db.cfg"));
+	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', $user, $pw);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch(PDOException $ex){
@@ -344,7 +345,7 @@ class Page{
 			return "";
 		}
 		else{
-			return 
+			return;
 		}
 	}
 
