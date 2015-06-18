@@ -310,7 +310,9 @@ class Hardware{
 
 class Page{
 
-	public function __construct($id,$title,$file){
+	private $parent = null;
+
+	public function __construct($id,$title,$file,$key){
 		$this->id = $id;
 		$this->title = $title;
 		$this->file = $file;
@@ -337,6 +339,15 @@ class Page{
 		return !empty($this->subPages);
 	}
 
+	public function getFullPath(){
+		if($this->parent==null){
+			return "";
+		}
+		else{
+			return 
+		}
+	}
+
 	public static function getPageStructure(){
 		global $db;
 
@@ -352,7 +363,7 @@ class Page{
 			$pageList[$superKey][$row['sleutel']] = $page;
 			$flat[$row['sleutel']] = $page;
     	}
-    	$root = new Page(null,null,null);
+    	$root = new Page(null,null,null,null);
     	if(!array_key_exists(null, $pageList)){
     		return $root;		//no root tag present
     	}
