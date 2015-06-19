@@ -193,9 +193,9 @@ class User{
 class Role{
 
 	//list of roles in database, is added-to when needed
-	static $roles = array();
+	static $roleList = array();
 	//list of rights
-	static $rights = array();
+	static $rightList = array();
 
 	/*
 	constructor for role, required data is retrieved from the database.
@@ -235,7 +235,7 @@ class Role{
 			$stmt->execute();
 
 			$this->rights = $stmt -> fetchAll(PDO::FETCH_COLUMN,0);
-			array_merge(Role::$rights,$this->rights);
+			array_merge(Role::$rightList,$this->rights);
 		}
 		catch(PDOException $ex){
 			die($ex->getMessage());
@@ -260,12 +260,12 @@ class Role{
 	Get role from id.
 	*/
 	public static function fromID($id){
-		if(array_key_exists($id, $roles)){
-			return $roles[$id]; //role is in array, return this
+		if(array_key_exists($id, Role::$roleList)){
+			return Role::$roleList[$id]; //role is in array, return this
 		}
 		else{
 			$role = new Role($id); //role is not in array, add to array and return
-			$roles[$id] = $role;
+			Role::$roleList[$id] = $role;
 			return $role;
 		}
 	}
@@ -365,6 +365,31 @@ class Page{
 			}
 			return $path;
 		}
+	}
+
+	public function isActive($activePath){
+		$path = $this -> getFullPath();
+		if($path===$activePath) return true;
+		return false; //add support for invisible pages later
+	}
+
+	public function getSubpage($key){;
+		if(array_key_exists($key, $this->subPages)){
+			return $this->subPages[$key];
+		}
+		return null;
+	}
+
+	public function find($path){
+		if(empty($path)){
+			return $this;
+		}
+		$key = array_shift($path);
+		$subPage = $this-> getSubpage($key);
+		if($subPage){
+			return $subPage->find($path);
+		}
+		return $subPage;
 	}
 
 	public function getFullPathString(){

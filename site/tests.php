@@ -116,35 +116,24 @@ function(){
 },"werkstation"
 );
 ?>
-
-<html>
-	<head>
-		<title>Tests</title>
-		<style type="text/css">
-			td {
-				border: double black;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Database interface tests</h1>
-		Using php version <?php echo phpversion() ?>
-		<table>
-			<thead>
-				<tr>
-					<td>
-						Name
-					</td>
-					<td>
-						Result
-					</td>
-					<td>
-						Expected
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
+<h1>Database interface tests</h1>
+Using php version <?php echo phpversion() ?>
+<table>
+	<thead>
+		<tr>
+			<td>
+				Name
+			</td>
+			<td>
+				Result
+			</td>
+			<td>
+				Expected
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+<?php
 foreach($tests as $test){
 	$results = $test->getResults();
 	$color = $results[3]?"green":"red";
@@ -152,9 +141,7 @@ foreach($tests as $test){
 	$expected = str($results[2]);
 	echo "<tr style=\"background: {$color};\"><td>{$results[0]}</td><td>{$result}</td><td>{$expected}</td></tr>";
 }
-				?>
-				<tr><td colspan=3>ALL TESTS COMPLETED</td></tr>
-			</tbody>
-		</table>
-	</body>
-</html>
+?>
+		<tr><td colspan=3>ALL TESTS COMPLETED</td></tr>
+	</tbody>
+</table>
