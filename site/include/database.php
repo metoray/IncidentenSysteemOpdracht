@@ -321,6 +321,7 @@ class Page{
 		$this->id = $id;
 		$this->title = $title;
 		$this->file = $file;
+		$this->key = $key;
 		$this->subPages = array();
 	}
 
@@ -338,19 +339,36 @@ class Page{
 
 	public function addSubpage($key,$page){
 		$this->subPages[$key] = $page;
+		$page->setParent($this);
 	}
 
 	public function hasSubpages(){
 		return !empty($this->subPages);
 	}
 
+	public function getSubpages(){
+		return $this->subPages;
+	}
+
+	private function setParent($parent){
+		$this->parent = $parent;
+	}
+
 	public function getFullPath(){
 		if($this->parent==null){
-			return "";
+			return array();
 		}
 		else{
-			return;
+			$path = $this -> parent -> getFullPath();
+			if($this->key){
+				$path[] = $this -> key;
+			}
+			return $path;
 		}
+	}
+
+	public function getFullPathString(){
+		return '/'.implode('/',$this->getFullPath());
 	}
 
 	public static function getPageStructure(){
@@ -364,7 +382,7 @@ class Page{
 			if(!array_key_exists($superKey, $pageList)){
 				$pageList[$superKey] = array();
 			}
-			$page = new Page($row['id'],$row['titel'],$row['file']);
+			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel']);
 			$pageList[$superKey][$row['sleutel']] = $page;
 			$flat[$row['sleutel']] = $page;
     	}
