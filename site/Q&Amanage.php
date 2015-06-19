@@ -1,6 +1,6 @@
 <?php
 	error_reporting(0);
-	include 'Robert/connect.php';
+	include 'include/connect.php';
 
 	//Vraag toevoegen knop.
 	echo "<form name=\"Vraag toevoegen\" action=\"vragentoevoegen.php\" method=\"get\">";

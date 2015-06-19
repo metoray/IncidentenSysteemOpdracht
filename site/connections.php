@@ -4,7 +4,7 @@ Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort 
 
 s= search = i=hardware_id s=select  */
 
-include "connect.php";
+include "include/connect.php";
 $identification_code = "GRL004";
 	
 	
