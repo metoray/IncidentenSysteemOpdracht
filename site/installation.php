@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		
 	</style>
 	
-	<form action="installatie.php" method="post" name="installatie">
+	<form action="#" method="post" name="installatie">
 	<select size ="30"  name="verwijder_van_installatie">
         	
 <?php	
