@@ -84,7 +84,7 @@ s=search a= all hardware s=and software*/
 	$nig_step2 = mysql_query($niq_step1);
 ?>
 	
-	<form action="installatie.php" method="post" name="niet_geinstalleerd">
+	<form action="#" method="post" name="niet_geinstalleerd">
 	<select size ="30"  name="voegtoe_aan_installatie">
 <?php
 	while($row2 = mysql_fetch_assoc($nig_step2))
