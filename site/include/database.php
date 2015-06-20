@@ -317,12 +317,13 @@ class Page{
 
 	private $parent = null;
 
-	public function __construct($id,$title,$file,$key,$right){
+	public function __construct($id,$title,$file,$key,$right,$visible){
 		$this->id = $id;
 		$this->title = $title;
 		$this->file = $file;
 		$this->key = $key;
 		$this->right = $right;
+		$this->visible = ($visible==1)?true:false;
 		$this->subPages = array();
 	}
 
@@ -345,6 +346,15 @@ class Page{
 
 	public function hasSubpages(){
 		return !empty($this->subPages);
+	}
+
+	public function hasVisibleSubpages(){
+		foreach ($this->subPages as $key => $page) {
+			if($page->isVisible()){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function getSubpages(){
@@ -371,7 +381,14 @@ class Page{
 	public function isActive($activePath){
 		$path = $this -> getFullPath();
 		if($path===$activePath) return true;
-		return false; //add support for invisible pages later
+		if($this->hasSubpages()){
+			foreach ($this->subPages as $key => $page) {
+				if($page->isActive($activePath) && (!$page -> isVisible())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public function getSubpage($key){;
@@ -395,6 +412,10 @@ class Page{
 		}
 		if($user==null) return false;
 		return $user -> hasRight($this->right);
+	}
+
+	public function isVisible(){
+		return $this->visible;
 	}
 
 	public function find($path){
@@ -424,6 +445,7 @@ class Page{
 		    page.titel,
 		    page.file,
 		    page.sleutel,
+		    page.zichtbaar,
 		    super.sleutel AS super,
 		    recht.beschrijving AS recht
 		FROM
@@ -439,11 +461,11 @@ class Page{
 			if(!array_key_exists($superKey, $pageList)){
 				$pageList[$superKey] = array();
 			}
-			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel'],$row['recht']);
+			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel'],$row['recht'],$row['zichtbaar']);
 			$pageList[$superKey][$row['sleutel']] = $page;
 			$flat[$row['sleutel']] = $page;
     	}
-    	$root = new Page(null,null,null,null,null);
+    	$root = new Page(null,null,null,null,null,1);
     	if(!array_key_exists(null, $pageList)){
     		return $root;		//no root tag present
     	}

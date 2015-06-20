@@ -62,24 +62,27 @@ if($currentPage){
 		<ul class="nav nav-pills nav-stacked">
 <?php
 function outputMenuItem($page){
-	global $path;
-	global $user;
-	if(!($page->hasAccess($user))) return false;
-	$active = ($page -> isActive($path))?'class="active" ':'';
+	global $path;	//get the current path to this scope
+	global $user;	//get the current user to this scope
+	if(!($page->hasAccess($user))) return false;	//don't show link if user does not have rights to this page
+	if(!($page->isVisible()))	return false;	//don't show if page is invisible
+	$active = ($page -> isActive($path))?'class="active" ':'';	//highlight page if it should
 	echo '<li '.$active.' role="presentation">';
-	if($page->hasSubpages()){
-		echo '<a href="#" class="tree-toggler">'.$page->getTitle().'<span class="caret"></span></a>';
+	if($page->hasVisibleSubpages()){
+		echo '<a href="#" class="tree-toggler">'.$page->getTitle().'<span class="caret"></span></a>';	//print title of page
 		echo '<ul class="nav nav-pills nav-stacked tree">';
-		foreach ($page->getSubpages() as $key => $subpage) {
+		foreach ($page->getSubpages() as $key => $subpage) {	//call this function for sub-pages
 			outputMenuItem($subpage);
 		}
 		echo '</ul>';
 	}
 	else{
-		echo '<a href="'.$page->getFullPathString().'">'.$page->getTitle().'</a>';
+		if($page->getFile()){	//only show link if it goes somewhere
+			echo '<a href="'.$page->getFullPathString().'">'.$page->getTitle().'</a>';	//show singular page link
+		}
 	}
 	echo '</li>';
-	return true;
+	return true;	//function had output
 }
 foreach ($root->getSubpages() as $key => $page) {
 	outputMenuItem($page);
