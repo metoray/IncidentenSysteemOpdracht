@@ -18,12 +18,12 @@ if($currentPage){
 	if(file_exists($fileName)){
 		if($currentPage->hasAccess($user)){
 			ob_start();
+			include($fileName);
+			$content = ob_get_clean();
 		}
 		else{
 			$content = "<h3>Je hebt niet de rechten voor deze pagina!</h3>";
 		}
-		include($fileName);
-		$content = ob_get_clean();
 	}
 	else{
 		$content = "Page not found: ".$fileName;
