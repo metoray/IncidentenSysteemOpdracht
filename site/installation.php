@@ -3,8 +3,9 @@
 Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort te achterhalen.
 
 s= search = i=hardware_id s=select  */
-include "include/connect.php";
-$identification_code = "BRG003";
+
+include "connect.php";
+$identification_code = "BRG003";  // = mysql_escape_string($_GET["$identification_code"]);
 echo "<br >";
 echo $identification_code;
 $sis_step1 = "select hardware_id from hardwarecomponenten where identificationcode = '".$identification_code."' ";
@@ -18,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	if(isset($_POST["verwijder_van_installatie"]))
 	{
-	 	$query = "delete from installatie where hardware_id = '".$sis_step3[0]."' and software_id = ".$_POST["verwijder_van_installatie"]." ";
+	 	$query = "delete from installatie where hardware_id = '".mysql_real_escape_string($sis_step3[0])."' and software_id = ".mysql_real_escape_string($_POST["verwijder_van_installatie"])." ";
 		mysql_query($query);
 	}
 	if(isset($_POST["voegtoe_aan_installatie"]))
 	{
-		$query = "insert into installatie(hardware_id, software_id) VALUES (".$sis_step3[0]." , ".$_POST["voegtoe_aan_installatie"]." )";
+		$query = "insert into installatie(hardware_id, software_id) VALUES (".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["voegtoe_aan_installatie"])." )";
 		mysql_query($query);
 	}
 };
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		
 	</style>
 	
-	<form action="#" method="post" name="installatie">
+	<form action="installation.php" method="post" name="installatie">
 	<select size ="30"  name="verwijder_van_installatie">
         	
 <?php	
@@ -84,7 +85,7 @@ s=search a= all hardware s=and software*/
 	$nig_step2 = mysql_query($niq_step1);
 ?>
 	
-	<form action="#" method="post" name="niet_geinstalleerd">
+	<form action="installation.php" method="post" name="niet_geinstalleerd">
 	<select size ="30"  name="voegtoe_aan_installatie">
 <?php
 	while($row2 = mysql_fetch_assoc($nig_step2))
