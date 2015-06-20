@@ -382,7 +382,17 @@ class Page{
 	}
 
 	public function hasAccess($user){
-		if($this->right==null) return true;
+		if($this->right==null){
+			if(!$this->hasSubpages()){
+				return true;
+			}
+			foreach ($this->subPages as $key => $page) {
+				if($page->hasAccess($user)){
+					return true;
+				}
+			}
+			return false;
+		}
 		if($user==null) return false;
 		return $user -> hasRight($this->right);
 	}
