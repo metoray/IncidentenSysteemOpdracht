@@ -1,7 +1,5 @@
 <?php
-	if(!isset($username)){
-		$username = "";
-	}
+	$username = isset($username)?$username:"";
 ?>
 <!DOCTYPE html>
 <html>

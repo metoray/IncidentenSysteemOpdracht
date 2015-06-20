@@ -1,8 +1,12 @@
 <?php
 require_once('include/database.php');
 
+session_start();
+
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $path = explode('/', $path);
+
+$user = isset($_SESSION['user'])?$_SESSION['user']:null;
 
 $root = Page::getPageStructure();
 $currentPage = $root->find($path);
@@ -12,7 +16,12 @@ if($currentPage){
 	$fileName = $currentPage->getFile();
 	$title = $currentPage -> getTitle();
 	if(file_exists($fileName)){
-		ob_start();
+		if($currentPage->hasAccess($user)){
+			ob_start();
+		}
+		else{
+			$content = "<h3>Je hebt niet de rechten voor deze pagina!</h3>";
+		}
 		include($fileName);
 		$content = ob_get_clean();
 	}
@@ -54,6 +63,8 @@ if($currentPage){
 <?php
 function outputMenuItem($page){
 	global $path;
+	global $user;
+	if(!($page->hasAccess($user))) return false;
 	$active = ($page -> isActive($path))?'class="active" ':'';
 	echo '<li '.$active.' role="presentation">';
 	if($page->hasSubpages()){
@@ -68,6 +79,7 @@ function outputMenuItem($page){
 		echo '<a href="'.$page->getFullPathString().'">'.$page->getTitle().'</a>';
 	}
 	echo '</li>';
+	return true;
 }
 foreach ($root->getSubpages() as $key => $page) {
 	outputMenuItem($page);
@@ -76,9 +88,18 @@ foreach ($root->getSubpages() as $key => $page) {
 		</ul>
 	</div>
 	<div class="col-md-10">
+		<div class="col-md-12">
+			<div class="text-right">
+				<a href="process/logout" class="btn btn-default">
+					Uitloggen <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-12">
 <?php
 echo $content;
 ?>
+		</div>
 	</div>
 </body>
 </html>

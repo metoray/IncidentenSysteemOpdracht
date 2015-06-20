@@ -317,11 +317,12 @@ class Page{
 
 	private $parent = null;
 
-	public function __construct($id,$title,$file,$key){
+	public function __construct($id,$title,$file,$key,$right){
 		$this->id = $id;
 		$this->title = $title;
 		$this->file = $file;
 		$this->key = $key;
+		$this->right = $right;
 		$this->subPages = array();
 	}
 
@@ -380,6 +381,12 @@ class Page{
 		return null;
 	}
 
+	public function hasAccess($user){
+		if($this->right==null) return true;
+		if($user==null) return false;
+		return $user -> hasRight($this->right);
+	}
+
 	public function find($path){
 		if(empty($path)){
 			return $this;
@@ -401,17 +408,32 @@ class Page{
 
 		$pageList = array(); //an assoc array of assoc arrays indexed by super key and key
 		$flat = array(); //an assoc array of pages
-		$query = "SELECT page.id, page.titel, page.file, page.sleutel, super.sleutel AS super FROM pagina page LEFT JOIN pagina super ON super.id = page.bovenliggende_pagina_id ORDER BY page.volgorde;";
+		$query =
+		"SELECT 
+    		page.id,
+		    page.titel,
+		    page.file,
+		    page.sleutel,
+		    super.sleutel AS super,
+		    recht.beschrijving AS recht
+		FROM
+		    pagina page
+		        LEFT JOIN
+		    pagina super ON super.id = page.bovenliggende_pagina_id
+		        LEFT JOIN
+		    recht ON page.recht_id = recht.id
+		ORDER BY page.volgorde;";
+
 		foreach ($db->query($query) as $row) {
 			$superKey = $row['super'];
 			if(!array_key_exists($superKey, $pageList)){
 				$pageList[$superKey] = array();
 			}
-			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel']);
+			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel'],$row['recht']);
 			$pageList[$superKey][$row['sleutel']] = $page;
 			$flat[$row['sleutel']] = $page;
     	}
-    	$root = new Page(null,null,null,null);
+    	$root = new Page(null,null,null,null,null);
     	if(!array_key_exists(null, $pageList)){
     		return $root;		//no root tag present
     	}
