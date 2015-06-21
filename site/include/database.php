@@ -317,13 +317,14 @@ class Page{
 
 	private $parent = null;
 
-	public function __construct($id,$title,$file,$key,$right,$visible){
+	public function __construct($id,$title,$file,$key,$right,$visible=true,$menu=true){
 		$this->id = $id;
 		$this->title = $title;
 		$this->file = $file;
 		$this->key = $key;
 		$this->right = $right;
-		$this->visible = ($visible==1)?true:false;
+		$this->visible = (bool)$visible;
+		$this->menu = (bool)$menu;
 		$this->subPages = array();
 	}
 
@@ -337,6 +338,10 @@ class Page{
 
 	public function getFile(){
 		return $this->file;
+	}
+
+	public function usesMenu(){
+		return $this->menu;
 	}
 
 	public function addSubpage($key,$page){
@@ -399,6 +404,7 @@ class Page{
 	}
 
 	public function hasAccess($user){
+		if($user==null) return false;
 		if($this->right==null){
 			if(!$this->hasSubpages()){
 				return true;
@@ -410,7 +416,6 @@ class Page{
 			}
 			return false;
 		}
-		if($user==null) return false;
 		return $user -> hasRight($this->right);
 	}
 
@@ -446,6 +451,7 @@ class Page{
 		    page.file,
 		    page.sleutel,
 		    page.zichtbaar,
+		    page.menu,
 		    super.sleutel AS super,
 		    recht.beschrijving AS recht
 		FROM
@@ -461,7 +467,7 @@ class Page{
 			if(!array_key_exists($superKey, $pageList)){
 				$pageList[$superKey] = array();
 			}
-			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel'],$row['recht'],$row['zichtbaar']);
+			$page = new Page($row['id'],$row['titel'],$row['file'],$row['sleutel'],$row['recht'],$row['zichtbaar'],$row['menu']);
 			$pageList[$superKey][$row['sleutel']] = $page;
 			$flat[$row['sleutel']] = $page;
     	}

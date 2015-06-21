@@ -17,9 +17,15 @@ if($currentPage){
 	$title = $currentPage -> getTitle();
 	if(file_exists($fileName)){
 		if($currentPage->hasAccess($user)){
-			ob_start();
-			include($fileName);
-			$content = ob_get_clean();
+			if($currentPage->usesMenu()){
+				ob_start();
+				include($fileName);
+				$content = ob_get_clean();
+			}
+			else{
+				include($fileName);
+				die();
+			}
 		}
 		else{
 			$content = "<h3>Je hebt niet de rechten voor deze pagina!</h3>";
@@ -93,7 +99,7 @@ foreach ($root->getSubpages() as $key => $page) {
 	<div class="col-md-10">
 		<div class="col-md-12">
 			<div class="text-right">
-				<a href="process/logout" class="btn btn-default">
+				<a href="/process/logout" class="btn btn-default">
 					Uitloggen <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 				</a>
 			</div>
