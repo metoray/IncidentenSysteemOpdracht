@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }; 
 
 ?>
-	<!-- CSS zodat de select menu�n naast elkaar staan. -->
+	<!-- CSS zodat de select menuën naast elkaar staan. -->
 	<style>
 	form
  	{
@@ -213,15 +213,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if($sis_step3[1] == 6 ||	$sis_step3[1] == 7)
 	{
 		//buiten locatie hardwarecomponenten = blh
-		$blh_query="select * from hardwarecomponenten  where soort_id = 6 or soort_id = 7  ";
+		$😨="select * from hardwarecomponenten  where soort_id = 6 or soort_id = 7  ";
 		foreach($connected as $connect)
 		{
 		
 			$not = " and !(hardware_id = ".$connect.")";
 		
-			$blh_query  = $blh_query.$not;
+			$😨  = $😨.$not;
 		} 
-		$blh_result= mysql_query($blh_query);
+		$blh_result= mysql_query($😨);
 		while($blh_rows = mysql_fetch_row($blh_result))
 		{
 			if($blh_rows[0] !=  $sis_step3[0])
