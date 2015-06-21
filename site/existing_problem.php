@@ -1,7 +1,6 @@
 <?php
 include "connect.php";
-// $current_problem = $_GET["problem"];
-$current_problem = 1;
+$current_problem = $_GET["problem_id"];
 $search_current = "select * from probleem where id = ".$current_problem."";
 $current_result = mysql_query($search_current) or die(mysql_error());
 $current_row = mysql_fetch_row($current_result);
@@ -66,8 +65,82 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 		<br />
 		<textarea rows="25" cols="100" name="solution" form="edit_problem"  ><?php echo	$current_row[3] ?> </textarea>
 		<br />
+		<input type="hidden" name="problem_id" value="<?php echo $current_problem; ?>"	>
 		<input type="submit" name="edit_problem" value = "Verwerk">
 		</form>
 
 	</body>
 </html>
+<?php
+		$search_related_inc = "select * from incidenten where problem_id = ".$current_problem." ";
+		$search_inc= mysql_query($search_related_inc);
+		echo "<form action= process.php name=toremove method=POST>";
+		echo "<table  border=1> ";
+		echo "<tr>";
+				echo "<td>";
+					echo "Incident code";
+				echo "</td>";
+		 		echo "<td>";
+					echo "start date" ;
+				echo "</td>";
+				echo "<td>";
+					echo "Status" ;
+				echo "</td>";
+				echo "<td>";
+					echo "identificationcode hardware" ;
+				echo "</td>";
+				echo "<td>";
+					echo "identificationcode software" ;
+				echo "</td>";
+				echo "<td>";
+					echo "verwijderen ja/nee";
+				echo "</td>";
+		echo "</tr>";
+		echo "gerelateerde incidenten:";
+		while($inc_rows= mysql_fetch_row($search_inc))
+		{
+		 	echo "<tr>";
+		 		echo "<td>";
+						echo "<a href=incident.php?hardware_id=".$inc_rows[0]."> ".$inc_rows[0]."	</a>";
+				echo "</td>";
+		 		echo "<td>";
+					echo $inc_rows[1] ;
+				echo "</td>";
+				$search_status = "select status from statussen_incident where id = ".$inc_rows[7]." ";
+				$search_status_result = mysql_query($search_status);
+				$status = mysql_fetch_row($search_status_result);
+				echo "<td>";
+					echo $status[0] ;
+				echo "</td>";
+				$search_hardware_identification = "select identificationcode from hardwarecomponenten where hardware_id = ".$inc_rows[11]." ";
+				$search_hardware_result = mysql_query($search_hardware_identification);
+				$hardware_identificationcode = mysql_fetch_row($search_hardware_result);
+				echo "<td>";
+					echo "<a href=installation.php?identification_code=".$hardware_identificationcode[0]."> ".$hardware_identificationcode[0]."	</a>";
+				echo "</td>";
+				if(isset($inc_rows[6]))
+				{
+					$search_software_identification = "select identificatiecode from software where software_id = ".$inc_rows[6]." ";
+					$search_software_result = mysql_query($search_software_identification);
+					$software_identificationcode = mysql_fetch_row($search_software_result);
+					echo "<td>";
+						echo $software_identificationcode[0] ;
+					echo "</td>";
+				}
+				else
+				{
+					echo "<td>";
+						echo "N.V.T" ;
+					echo "</td>";
+				}
+				echo "<td>";
+					?> <input type="checkbox" name="remove[]" value= "<?php echo $inc_rows[0]; ?>" > <?php	
+				echo "</td>";
+			echo "</tr>";
+			echo "<br />";
+		}
+		echo "</table>";
+		echo "<input type=submit name=remove_incidens value = Verwijder>";
+		echo "</form>";
+	
+?>

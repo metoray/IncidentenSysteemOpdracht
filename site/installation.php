@@ -5,9 +5,33 @@ Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort 
 s= search = i=hardware_id s=select  */
 
 include "connect.php";
-$identification_code = "BRG003";  // = mysql_escape_string($_GET["$identification_code"]);
+ // = mysql_escape_string($_GET["$identification_code"]);
+if(isset($_GET["identification_code"]))
+{
+	$identification_code = mysql_real_escape_string($_GET["identification_code"]);
+}
+else
+{
+	$identification_code = $_POST["installation"];
+}
+
 echo "<br >";
+
 echo $identification_code;
+echo "<br >";
+
+echo "<a href =connection.php?identification_code=".$identification_code."> Verbindingen </a>";
+/*
+echo "<table>";
+echo "<tr>";
+	echo "<td>";
+
+	echo "</td>";
+		echo "<td>";
+
+	echo "</td>";
+echo "</tr>";
+*/
 $sis_step1 = "select hardware_id from hardwarecomponenten where identificationcode = '".$identification_code."' ";
 
 $sis_step2 = mysql_query($sis_step1);
@@ -21,11 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 	 	$query = "delete from installatie where hardware_id = '".mysql_real_escape_string($sis_step3[0])."' and software_id = ".mysql_real_escape_string($_POST["verwijder_van_installatie"])." ";
 		mysql_query($query);
+	
 	}
 	if(isset($_POST["voegtoe_aan_installatie"]))
 	{
 		$query = "insert into installatie(hardware_id, software_id) VALUES (".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["voegtoe_aan_installatie"])." )";
 		mysql_query($query);
+		
 	}
 };
 
@@ -71,7 +97,8 @@ s=search a= all hardware s=and software*/
     echo "</select> ";  //sluit de select menu af
       echo "<br />"; 	
     
-?>     
+?>  
+	<input type="hidden" name="installation" value="<?php echo $identification_code; ?>"	>  
 	<input type="submit" name="remove_program" value = "'     >       '">
 		</form>
 <?php
@@ -101,5 +128,7 @@ s=search a= all hardware s=and software*/
 	};
 	echo "</select> ";
     echo "<br />"; 	
-?><input type="submit" name="add_program" value = "'     <       '">
+?>
+	<input type="hidden" name="installation" value="<?php echo $identification_code; ?>"	> 
+	<input type="submit" name="add_program" value = "'     <       '">
 		</form>
