@@ -491,4 +491,73 @@ class Page{
 
 }
 
+class Question{
+
+	public function __construct($text,$id=null){
+		$this->id = $id;
+		$this->text = $text;
+	}
+
+	public function setText($text){
+		$this->text = $text;
+	}
+
+	public function getText(){
+		return $this->text;
+	}
+
+	public function getAnswers(){
+		$answers = array();
+		global $db;
+		$stmt = $db -> prepare('SELECT * FROM antwoord WHERE vraag_id=:id');
+		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+		$stmt -> execute();
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+			$answers[] = new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$row['id']);
+		}
+		return $answers;
+	}
+
+	public function save(){
+		global $db;
+		if($this->id === null){
+			$stmt = $db -> prepare('INSERT INTO vraag (text) VALUES (:text)');
+			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
+			$stmt -> execute();
+		}
+		else{
+			$stmt = $db -> prepare('UPDATE vraag SET tekst=:text WHERE id=:id;');
+			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
+			$stmt -> bindValue('id', $this->text, PDO::PARAM_INT);
+			$stmt -> execute();
+			$this->id = $db -> lastInsertId();
+		}
+	}
+
+	public static function fromID($id){
+		global $db;
+		$stmt = $db -> prepare('SELECT id,tekst FROM vraag WHERE id=:id');	//order of columns is known
+		$stmt -> bindValue('id', $id, PDO::PARAM_INT);
+		$stmt -> execute();
+		list($id,$text) = $stmt -> fetch();
+		return new Question($text,$id);
+	}
+
+}
+
+class Answer{
+
+	public function __construct($text,$nextQuestionID,$ticketTemplateID,$id=null){
+		$this->text = $text;
+		$this->nextQuestionID = $nextQuestionID;
+		$this->ticketTemplateID = $ticketTemplateID;
+		$this->id = $id;
+	}
+
+	public function getText(){
+		return $this->text;
+	}
+
+}
+
 ?>
