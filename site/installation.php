@@ -4,7 +4,7 @@ Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort 
 
 s= search = i=hardware_id s=select  */
 
-include "connect.php";
+include "include/connect.php";
  // = mysql_escape_string($_GET["$identification_code"]);
 if(isset($_GET["identification_code"]))
 {
