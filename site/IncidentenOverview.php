@@ -1,6 +1,6 @@
 <?php
 	error_reporting(0);
-	include 'Robert/connect.php';
+	include 'include/connect.php';
 
 	//Query voor de gegevens van de incidenten tabel op te halen.
 	$query = "SELECT * ";
