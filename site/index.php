@@ -4,7 +4,9 @@ require_once('include/database.php');
 session_start();
 
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
-$path = explode('/', $path);
+$path = explode('/', preg_split("/[?#]/",$path)[0]);
+
+print_r($path);
 
 $user = isset($_SESSION['user'])?$_SESSION['user']:null;
 
