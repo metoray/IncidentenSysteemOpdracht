@@ -47,14 +47,22 @@ if($currentPage){
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<style type="text/css">
+		table td.shrink {
+		    white-space:nowrap
+		}
+		table td.expand {
+		    width: 99%
+		}
+	</style>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$('.tree-toggler').click(function () {
 				$(this).parent().children('ul.tree').toggle(100);
 			});
-			$('ul.tree').each(function(idx){
-				if($(this).find('li.active').length==0){
+			$('.tree').each(function(idx){
+				if($(this).find('.active').length==0){
 					$(this).toggle();
 				};
 			});
