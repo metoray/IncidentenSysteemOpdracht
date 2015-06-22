@@ -6,10 +6,11 @@ session_start();
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $path = explode('/', preg_split("/[?#]/",$path)[0]);
 
-print_r($path);
-
 $user = isset($_SESSION['user'])?$_SESSION['user']:null;
-
+if($user==null){
+	header('Location: /login.php');
+	die();
+}
 $root = Page::getPageStructure();
 $currentPage = $root->find($path);
 $content = "Page not found!";
