@@ -45,6 +45,11 @@ class User{
 	/*
 	Various getters and setters for user data
 	*/
+	public function getID(){
+		return $this->id;
+	}
+
+
 	public function getName(){
 		return $this->name;
 	}
