@@ -533,13 +533,13 @@ class Question{
 			$stmt = $db -> prepare('INSERT INTO vraag (text) VALUES (:text)');
 			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
 			$stmt -> execute();
+			$this->id = $db -> lastInsertId();
 		}
 		else{
 			$stmt = $db -> prepare('UPDATE vraag SET tekst=:text WHERE id=:id;');
 			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
 			$stmt -> bindValue('id', $this->text, PDO::PARAM_INT);
 			$stmt -> execute();
-			$this->id = $db -> lastInsertId();
 		}
 	}
 

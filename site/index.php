@@ -108,7 +108,10 @@ foreach ($root->getSubpages() as $key => $page) {
 		</ul>
 	</div>
 	<div class="col-md-10">
-		<div class="col-md-12">
+		<div class="col-md-6">
+			<h3><?php echo $title; ?></h3>
+		</div>
+		<div class="col-md-6">
 			<div class="text-right">
 				<a href="/process/logout" class="btn btn-default">
 					Uitloggen <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
