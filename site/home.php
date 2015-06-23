@@ -39,10 +39,10 @@ foreach ($incidenten as $i) {
        
             <div class="panel-heading"><center><h1>Welkom <?php echo $_SESSION["user"]->name; ?></h1></center></div>
             <ul class="list-group">
-                <a href="new_incident.php" class="btn btn-primary btn-lg btn-block" role="button">Incident melden</a>
-                <a href="my_incidents.php" class="btn btn-primary btn-lg btn-block" role="button">uw gemelde incidenten bekijken</a>
+                <a href="new_incident" class="btn btn-primary btn-lg btn-block" role="button">Incident melden</a>
+                <a href="my_incidents" class="btn btn-primary btn-lg btn-block" role="button">uw gemelde incidenten bekijken</a>
                 <?php if ($_SESSION["user"]->roleID == 4) {
-                    echo '<a href="incidentenoverview.php" class="btn btn-primary btn-lg btn-block" role="button">Alle incidenten inzien</a>';}?>
+                    echo '<a href="incidentenoverview" class="btn btn-primary btn-lg btn-block" role="button">Alle incidenten inzien</a>';}?>
             </ul>
         
     </div>
