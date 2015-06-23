@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 	elseif(isset($_POST["send_incident_user"]))
 	{
-	 		$start_date 	=date("Y-m-d");
+	 	
 			$user			=$_POST["user"];
 			$discription 	=$_POST["description"];	
 			$software 		=$_POST["software"];
@@ -72,16 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$id 			=$id_row[0];
 			$id++;	
 			$insert_incident = "insert into incidenten
-			(inc_id		,start_incident		, omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			(inc_id				, omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
-			(".$id."		,'".$start_date."'	, '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
+			(".$id."			, '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
 			mysql_query($insert_incident);
 			$location= "Location: edit_incident.php?inc_id=".$id." ";
 			header($location);
 	} 
 	elseif(isset($_POST["send_incident_practioner"]))
 	{
-			$start_date 	=date("Y-m-d");
+			
 			$discription 	=$_POST["description"];
 			$user			=$_POST["user"];
 			$software 		=$_POST["software"];
@@ -96,9 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$id 			=$id_row[0];
 			$id++;
 			$insert_incident = "insert into incidenten
-			(inc_id		,start_incident		, omschrijving		, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			(inc_id			, omschrijving		, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
-			(".$id."		,'".$start_date."'	, '".$discription."', ".$user."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
+			(".$id."		, '".$discription."', ".$user."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
 			mysql_query($insert_incident);
 			$location= "Location: edit_incident.php?inc_id=".$id." ";
 			header($location);
