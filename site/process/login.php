@@ -20,7 +20,7 @@ else{
 }
 
 if(!isset($error)){
-	header("Location: /");
+	header("Location: ../home");
 }
 else{
 	include '../login.php';
