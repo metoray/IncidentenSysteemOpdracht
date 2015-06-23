@@ -4,7 +4,7 @@ if(isset($_GET['a'])){
 	print_r($answer);
 	if($answer){
 		if($answer->getNext()){
-			$questionID = $anser -> getNext();
+			$questionID = $answer -> getNext();
 		}
 		elseif($answer->getIncidentTemplate()){
 			header("Location: /new_incident?template={$answer->getIncidentTemplate()}");
@@ -26,7 +26,7 @@ $question = Question::fromID($questionID);
 $answers = '';
 
 foreach ($question->getAnswers() as $answer) {
-		$answers .= '<li class="list-group-item"><a href="/question?a='.$answer->getNext().'" class="btn btn-primary btn-lg btn-block">'.$answer->getText().'</a></li>';
+		$answers .= '<li class="list-group-item"><a href="/question?a='.$answer->getID().'" class="btn btn-primary btn-lg btn-block">'.$answer->getText().'</a></li>';
 }
 
 echo <<<PANEL
