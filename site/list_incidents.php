@@ -1,9 +1,9 @@
 <?php
 $connect			=new mysqli('localhost', 'root', '', 'rick_hondsrug');
 $db =mysql_select_db( "rick_hondsrug");
-/*$_session_start();
-$user = $_SESSION["user"] ->getID(); */
-$user_id= 10;
+$_session_start();
+$user = $_SESSION["user"] ->getID();
+//$user_id= 10;
 $incidents_query = "select * from incidenten where gebruiker_id = ".$user_id."";
 $incidents_result = mysqli_query($connect,$incidents_query );
 
