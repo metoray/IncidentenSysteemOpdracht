@@ -69,7 +69,7 @@ foreach ($question->getAnswers() as $answer) {
 				</select>
 			</div>
 			<div class="col-md-1">
-				<a class="btn btn-danger btn-xs" href="/process/delete_answer?id={$id}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a>
+				<a class="btn btn-danger btn-xs" href="/process/delete_answer?id={$id}&q={$questionID}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a>
 			</div>
 		</div>
 	</div>

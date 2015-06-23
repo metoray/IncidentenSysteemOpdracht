@@ -527,6 +527,14 @@ class Question{
 		return $answers;
 	}
 
+	public function delete(){
+		global $db;
+		$stmt = $db -> prepare('DELETE FROM vraag WHERE id=:id');
+		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+		$stmt -> execute();
+		$this -> id = null;
+	}
+
 	public function save(){
 		global $db;
 		if($this->id === null){
@@ -598,6 +606,14 @@ class Answer{
 
 	public function setIncidentTemplate($tmp){
 		$this->template = $tmp;
+	}
+
+	public function delete(){
+		global $db;
+		$stmt = $db -> prepare('DELETE FROM antwoord WHERE id=:id');
+		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+		$stmt -> execute();
+		$this -> id = null;
 	}
 
 	public function save(){
