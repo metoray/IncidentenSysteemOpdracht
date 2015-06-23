@@ -2,7 +2,7 @@
 	/*
 	$_session_start();
 	$_session["user"];
-	$user = $_session["user"]
+	$user = $_SESSION["user"] ->getID();
 		*/
 	include "connect.php";
 	$user= 203;
@@ -147,8 +147,4 @@
 			</form>
 			<?php
 		}
-		
-		
-	
-
 ?>
