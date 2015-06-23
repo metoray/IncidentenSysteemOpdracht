@@ -575,8 +575,53 @@ class Answer{
 		$this->id = $id;
 	}
 
+	public function getID(){
+		return $this->id;
+	}
+
 	public function getText(){
 		return $this->text;
+	}
+
+}
+
+class IncidentTemplate{
+
+	public function __construct($desc,$impact,$urgency,$priority,$id=null){
+		$this->id = $id;
+		$this->desc = $desc;
+		$this->impact = $impact;
+		$this->urgency = $urgency;
+		$this->priority = $priority;
+	}
+
+	public function getID(){
+		return $this->id;
+	}
+
+	public function getText(){
+		return $this->desc;
+	}
+
+	public static function fromID($id){
+		global $db;
+		$stmt = $db -> prepare('SELECT * FROM standaard_incident WHERE id=:id;');
+		$stmt -> bindValue('id', $id, PDO::PARAM_INT);
+		$stmt -> execute();
+		$row = $stmt -> fetch(PDO::FETCH_ASSOC);
+		return new IncidentTemplate($row['beschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
+	}
+
+	public static function getAll(){
+		global $db;
+		$questions = array();
+		$stmt = $db -> prepare('SELECT * FROM standaard_incident;');
+		$stmt -> execute();
+		while($row = $stmt -> fetch(PDO::FETCH_ASSOC)){
+			
+			$questions[] = new IncidentTemplate($row['beschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
+		}
+		return $questions;
 	}
 
 }
