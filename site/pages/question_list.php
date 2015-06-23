@@ -12,6 +12,7 @@
 foreach ($questions as $question) {
 	$id = $question->getID();
 	$text = htmlentities($question->getText());
+	$text = $text?$text:"<i>Naamloos</i>";
 	echo <<<HTML
 		<tr>
 			<td class="shrink">{$question->getID()}</td>
@@ -26,7 +27,7 @@ HTML;
 }
 ?>
 		<tr>
-			<form action="/post.php" method="post">
+			<form action="/cmdb/questions/edit" method="post">
 				<td class="shrink"></td>
 				<td class="shrink text-right">
 					<button type="submit" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>

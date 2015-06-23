@@ -16,6 +16,9 @@ $question = Question::fromID($questionID);
 $text = av($_POST,'text');
 $answers = av($_POST,'answers');
 
+$question -> setText($text);
+$question -> save();
+
 foreach ($answers as $key => $answer) {
 	$text = av($answer,'text');
 	$next = av($answer,'next');

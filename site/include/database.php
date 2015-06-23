@@ -538,7 +538,7 @@ class Question{
 		else{
 			$stmt = $db -> prepare('UPDATE vraag SET tekst=:text WHERE id=:id;');
 			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
-			$stmt -> bindValue('id', $this->text, PDO::PARAM_INT);
+			$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
 			$stmt -> execute();
 		}
 	}
