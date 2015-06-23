@@ -563,7 +563,7 @@ class Question{
 	public static function getAll(){
 		global $db;
 		$questions = array();
-		$stmt = $db -> prepare('SELECT id,tekst FROM vraag ORDER BY volgorde;');	//order of columns is known
+		$stmt = $db -> prepare('SELECT id,tekst FROM vraag;');	//order of columns is known
 		$stmt -> execute();
 		while($row = $stmt -> fetch()){
 			list($id,$text) = $row;
