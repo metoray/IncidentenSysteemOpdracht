@@ -4,7 +4,7 @@
 	$_session["user"];
 	$user = $_SESSION["user"] ->getID();
 		*/
-	include "connect.php";
+	include "include/connect.php";
 	$user= 203;
 	$query_user = "select * from gebruikers where gebruiker_id= ".$user."";
 

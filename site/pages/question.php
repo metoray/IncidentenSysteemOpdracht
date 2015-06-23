@@ -1,12 +1,32 @@
 <?php
-$questionID = isset($_GET['q'])?$_GET['q']:1;
+if(isset($_GET['a'])){
+	$answer = Answer::fromID($_GET['a']);
+	print_r($answer);
+	if($answer){
+		if($answer->getNext()){
+			$questionID = $anser -> getNext();
+		}
+		elseif($answer->getIncidentTemplate()){
+			header("Location: /new_incident?template={$answer->getIncidentTemplate()}");
+			die();
+		}
+	}
+}
+else {
+	$questionID = 1;
+}
+
+if(!isset($questionID)){
+	header("Refresh: 5; url=/new_incident");
+	die("<strong>Voor dit antwoord zijn geen voorzieningen getroffen, je wordt doorverwezen naar het incidenten formulier.</strong>");
+}
+
 $question = Question::fromID($questionID);
+
 $answers = '';
 
 foreach ($question->getAnswers() as $answer) {
-	$answers .=<<<ANSWER
-					<li class="list-group-item"><button class="btn btn-primary btn-lg btn-block">{$answer->getText()}</button></li>
-ANSWER;
+		$answers .= '<li class="list-group-item"><a href="/question?a='.$answer->getNext().'" class="btn btn-primary btn-lg btn-block">'.$answer->getText().'</a></li>';
 }
 
 echo <<<PANEL

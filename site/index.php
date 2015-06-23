@@ -19,7 +19,7 @@ if($currentPage){
 	$fileName = $currentPage->getFile();
 	$title = $currentPage -> getTitle();
 	if(file_exists($fileName)){
-		if($currentPage->hasAccess($user)){
+		if($currentPage->hasAccess($_SESSION['user'])){
 			if($currentPage->usesMenu()){
 				ob_start();
 				include($fileName);
@@ -80,8 +80,7 @@ if($currentPage){
 <?php
 function outputMenuItem($page){
 	global $path;	//get the current path to this scope
-	global $user;	//get the current user to this scope
-	if(!($page->hasAccess($user))) return false;	//don't show link if user does not have rights to this page
+	if(!($page->hasAccess($_SESSION['user']))) return false;	//don't show link if user does not have rights to this page
 	if(!($page->isVisible()))	return false;	//don't show if page is invisible
 	$active = ($page -> isActive($path))?'class="active" ':'';	//highlight page if it should
 	echo '<li '.$active.' role="presentation">';

@@ -563,7 +563,7 @@ class Question{
 	public static function getAll(){
 		global $db;
 		$questions = array();
-		$stmt = $db -> prepare('SELECT id,tekst FROM vraag;');	//order of columns is known
+		$stmt = $db -> prepare('SELECT id,tekst FROM vraag ORDER BY volgorde;');	//order of columns is known
 		$stmt -> execute();
 		while($row = $stmt -> fetch()){
 			list($id,$text) = $row;
@@ -648,6 +648,7 @@ class Answer{
 		$stmt -> bindValue('id', $id, PDO::PARAM_INT);
 		$stmt -> execute();
 		$row = $stmt -> fetch(PDO::FETCH_ASSOC);
+		if(!$row) return null;
 		return new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$row['vraag_id'],$id);
 	}
 
@@ -686,7 +687,6 @@ class IncidentTemplate{
 		$stmt = $db -> prepare('SELECT * FROM standaard_incident;');
 		$stmt -> execute();
 		while($row = $stmt -> fetch(PDO::FETCH_ASSOC)){
-			
 			$questions[] = new IncidentTemplate($row['beschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
 		}
 		return $questions;
