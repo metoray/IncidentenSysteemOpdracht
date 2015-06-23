@@ -522,7 +522,7 @@ class Question{
 		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
 		$stmt -> execute();
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-			$answers[] = new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$row['id']);
+			$answers[] = new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$this->id,$row['id']);
 		}
 		return $answers;
 	}
@@ -530,7 +530,7 @@ class Question{
 	public function save(){
 		global $db;
 		if($this->id === null){
-			$stmt = $db -> prepare('INSERT INTO vraag (text) VALUES (:text)');
+			$stmt = $db -> prepare('INSERT INTO vraag (tekst) VALUES (:text)');
 			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
 			$stmt -> execute();
 			$this->id = $db -> lastInsertId();
@@ -568,19 +568,71 @@ class Question{
 
 class Answer{
 
-	public function __construct($text,$nextQuestionID,$ticketTemplateID,$id=null){
+	public function __construct($text,$next,$template,$qid,$id=null){
+		$this->qid = $qid;	//question id
 		$this->text = $text;
-		$this->nextQuestionID = $nextQuestionID;
-		$this->ticketTemplateID = $ticketTemplateID;
+		$this->next = (!$next)?null:$next;
+		$this->template = (!$template)?null:$template;
 		$this->id = $id;
+	}
+
+	public function getText(){
+		return $this->text;
+	}
+
+	public function getNext(){
+		return $this->next;
+	}
+
+	public function getIncidentTemplate(){
+		return $this->template;
+	}
+
+	public function setText($txt){
+		$this->text = $txt;
+	}
+
+	public function setNext($nxt){
+		$this->next = $nxt;
+	}
+
+	public function setIncidentTemplate($tmp){
+		$this->template = $tmp;
+	}
+
+	public function save(){
+		global $db;
+		if($this->id === null){
+			$stmt = $db -> prepare('INSERT INTO antwoord (tekst,vervolg_vraag_id,default_ticket_id,vraag_id) VALUES (:text,:next,:temp,:question)');
+			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
+			$stmt -> bindValue('next', $this->next, PDO::PARAM_INT);
+			$stmt -> bindValue('temp', $this->template, PDO::PARAM_INT);
+			$stmt -> bindValue('question', $this->qid, PDO::PARAM_INT);
+			$stmt -> execute();
+			$this->id = $db -> lastInsertId();
+		}
+		else{
+			$stmt = $db -> prepare('UPDATE antwoord SET tekst=:text, vervolg_vraag_id=:next, default_ticket_id=:temp, vraag_id=:question WHERE id=:id;');
+			$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+			$stmt -> bindValue('text', $this->text, PDO::PARAM_STR);
+			$stmt -> bindValue('next', $this->next, PDO::PARAM_INT);
+			$stmt -> bindValue('temp', $this->template, PDO::PARAM_INT);
+			$stmt -> bindValue('question', $this->qid, PDO::PARAM_INT);
+			$stmt -> execute();
+		}
 	}
 
 	public function getID(){
 		return $this->id;
 	}
 
-	public function getText(){
-		return $this->text;
+	public static function fromID($id){
+		global $db;
+		$stmt = $db -> prepare('SELECT * FROM antwoord WHERE id=:id;');
+		$stmt -> bindValue('id', $id, PDO::PARAM_INT);
+		$stmt -> execute();
+		$row = $stmt -> fetch(PDO::FETCH_ASSOC);
+		return new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$row['vraag_id'],$id);
 	}
 
 }
