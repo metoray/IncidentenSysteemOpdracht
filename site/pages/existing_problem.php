@@ -1,9 +1,9 @@
 <?php
-include "connect.php";
+include "include/connect.php";
 $current_problem = $_GET["problem_id"];
 $search_current = "select * from probleem where id = ".$current_problem."";
-$current_result = mysql_query($search_current) or die(mysql_error());
-$current_row = mysql_fetch_row($current_result);
+$current_result = mysqli_query($con ,$search_current) or die(mysql_error());
+$current_row = mysqli_fetch_row($current_result);
 //0 = id 1 = status 2=beschrijving 3=oplossing 4=begindatum 5=einddatum 6=behanadelaar/medewerker
 
 $search_practitoner = "select * from gebruikers where rol_id = 2 or rol_id = 4";
