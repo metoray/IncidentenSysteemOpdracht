@@ -7,10 +7,10 @@
 	$query .= "FROM incidenten";
 	
 	//Zet de resultaten van query incidenten tabel in variabel.
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 
 	//Zet de resultaten van de query in een associative array.
-	while ($incidenten_query = mysql_fetch_assoc($result)) {
+	while ($incidenten_query = mysqli_fetch_assoc($result)) {
 		$incidenten[] = array('IncidentId' => intval($incidenten_query["inc_id"]), 'StartDatum' => $incidenten_query["start_incident"], 'Omschrijving' => $incidenten_query["Omschrijving"], 'Workaround' => $incidenten_query["Workaround"], 'GebruikerId' => $incidenten_query["gebruiker_id"], 'EindDatum' => $incidenten_query["eind_incident"], 'SoftwareComponent' => $incidenten_query["software_component"], 'IncidentTypeId' => intval($incidenten_query["incident_type_id"]), 'Impact' => intval($incidenten_query["impact"]), 'Urgentie' => intval($incidenten_query["urgentie"]), 'Prioriteit' => intval($incidenten_query["prioriteit"]), 'HardwareId' => intval($incidenten_query["hardware_id"]), 'MedewerkerId' => intval($incidenten_query["medewerker_id"]));
 	}
 
@@ -28,10 +28,10 @@
 			$query .= "WHERE gebruiker_id = ". $i['GebruikerId'];
 			
 			//Zet de resultaten van query.
-			$result = mysql_query($query);
+			$result = mysqli_query($con,$query);
 
 			//Zet de resultaten van de query in een associative array.
-			while ($gebruikers_query = mysql_fetch_assoc($result)) {
+			while ($gebruikers_query = mysqli_fetch_assoc($result)) {
 				$Gebruikernaam = $gebruikers_query["naam"];
 			}
 		}
@@ -46,10 +46,10 @@
 			$query .= "WHERE gebruiker_id = ". $i['MedewerkerId'];
 			
 			//Zet de resultaten van query.
-			$result = mysql_query($query);
+			$result = mysqli_query($con,$query);
 
 			//Zet de resultaten van de query in een associative array.
-			while ($gebruikers_query = mysql_fetch_assoc($result)) {
+			while ($gebruikers_query = mysqli_fetch_assoc($result)) {
 				$Medewerkernaam = $gebruikers_query["naam"];
 			}
 		}
