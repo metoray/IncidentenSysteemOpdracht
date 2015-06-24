@@ -5,12 +5,12 @@ $practitoner_result = mysqli_query($con,$search_practitoner) or die(mysql_error(
 ?>
 <html>
 	<body>
-		<form name="new_problem" action= "process.php" method="POST" id="new_problem">
+		<form name="/process/robert" action= "process.php" method="POST" id="new_problem">
 		<br />
 		Behandelaar:<select name="practitioner">
 		
 		<?php
-			while($practitoner_row = mysql_fetch_array($practitoner_result))
+			while($practitoner_row = mysqli_fetch_array($practitoner_result))
 			{
 				?>
 				
