@@ -1,5 +1,4 @@
 <?php
-	error_reporting(0);
 	include 'include/connect.php';
 
 	//Query voor de gegevens van de software, leverancier, soort_software, producent tabelen op te halen.
@@ -11,11 +10,11 @@
 
 	
 	//Zet de resultaten van query variabel zetten.
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 
 	$software = array();
 	//Zet de resultaten van de query in een associative array.
-	while ($software_query = mysql_fetch_assoc($result)) {
+	while ($software_query = mysqli_fetch_assoc($result)) {
 		$software[] = array('SoftwareId' => intval($software_query["software_id"]), 'Identificatiecode' => $software_query["identificatiecode"], 'SoortId' => intval($software_query["soort_id"]), 'ProducentId' => intval($software_query["producent_id"]), 'LeverancierId' => intval($software_query["lev_id"]), 'ServerLicentie' => $software_query["server_licentie"], 'ServerLicentieAantal' => intval($software_query["serverlicenties"]), 'GebruikerLicenties' => intval($software_query["gebruiker_licenties"]), 'LeverancierNaam' => $software_query["naam"], 'SoortSoftware' => $software_query["beschrijving"], 'Producent' => $software_query["prod_naam"]);
 	}
 
