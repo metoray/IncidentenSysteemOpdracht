@@ -11,6 +11,7 @@ $query .= " LIMIT 5";
 
 $result = mysqli_query($con, $query);
 
+$incidenten = array();
 //Zet de resultaten van de query in een associative array.
 while ($incidenten_query = mysqli_fetch_assoc($result)) {
     $incidenten[] = array('IncidentId' => intval($incidenten_query["inc_id"]), 'StartDatum' => $incidenten_query["start_incident"], 'Omschrijving' => $incidenten_query["Omschrijving"],'status' => $incidenten_query["status"]);

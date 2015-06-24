@@ -10,6 +10,7 @@
 	//Zet de resultaten van query incidenten tabel in variabel.
 	$result = mysqli_query($con, $query);
 
+	$incidenten = array();
 	//Zet de resultaten van de query in een associative array.
 	while ($incidenten_query = mysqli_fetch_assoc($result)) {
 		$incidenten[] = array('IncidentId' => intval($incidenten_query["inc_id"]), 'StartDatum' => $incidenten_query["start_incident"], 'Omschrijving' => $incidenten_query["Omschrijving"], 'Workaround' => $incidenten_query["Workaround"], 'GebruikerId' => $incidenten_query["gebruiker_id"], 'EindDatum' => $incidenten_query["eind_incident"], 'SoftwareComponent' => $incidenten_query["software_component"], 'Impact' => intval($incidenten_query["impact"]), 'Urgentie' => intval($incidenten_query["urgentie"]), 'Prioriteit' => intval($incidenten_query["prioriteit"]), 'HardwareId' => intval($incidenten_query["hardware_id"]), 'MedewerkerId' => intval($incidenten_query["medewerker_id"]),'status' => $incidenten_query["status"]);

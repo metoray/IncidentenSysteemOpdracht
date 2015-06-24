@@ -529,6 +529,9 @@ class Question{
 
 	public function delete(){
 		global $db;
+		foreach ($this->getAnswers as $answer) {
+			$answer -> delete();
+		}
 		$stmt = $db -> prepare('DELETE FROM vraag WHERE id=:id');
 		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
 		$stmt -> execute();
@@ -702,6 +705,9 @@ class IncidentTemplate{
 
 	public function delete(){
 		global $db;
+		$stmt -> prepare("UPDATE antwoord SET default_ticket_id=NULL WHERE default_ticket_id=:id");
+		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+		$stmt -> execute();
 		$stmt = $db -> prepare('DELETE FROM standaard_incident WHERE id=:id');
 		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
 		$stmt -> execute();
