@@ -7,7 +7,7 @@ $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $path = explode('/', preg_split("/[?#]/",$path)[0]);
 
 $user = isset($_SESSION['user'])?$_SESSION['user']:null;
-if($user==null){
+if($user==null||!$path){
 	header('Location: /login.php');
 	die();
 }
