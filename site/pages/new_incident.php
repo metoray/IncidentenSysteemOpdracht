@@ -7,7 +7,14 @@
 
 	$user_result = mysqli_query($con,$query_user) or die(mysql_error());
 	$user_row =  mysqli_fetch_row($user_result);
-	
+
+	$text = "";
+	if(isset($_SESSION['answers'])){
+		$list = AnswerList::fromArray(0,$_SESSION['answers']);
+		$text = $list -> getTemplate() -> getText();
+		echo $list -> render();
+	}
+
 	 	if($user_row[5] == 1)
 	 	{
 			echo "Gebruiker : ".$user_row[1];
@@ -39,7 +46,7 @@
 			echo "Beschrijving";
 			echo "<br />";
 			?>
-			<textarea rows="25" cols="100" name="description" form="send_incident_user"  ></textarea>
+			<textarea rows="25" cols="100" name="description" form="send_incident_user"  ><?php echo $text; ?></textarea>
 			<?php
 			echo "<br />";
 			?>
@@ -121,7 +128,7 @@
 			echo "<br />";
 			echo "<br />";
 			?>
-				<textarea rows="25" cols="100" name="description" form="send_incident_practioner"  ></textarea>
+				<textarea rows="25" cols="100" name="description" form="send_incident_practioner"  ><?php echo $text; ?></textarea>
 			<?php
 			echo "<br />";
 			?>
@@ -130,9 +137,4 @@
 			</form>
 			<?php
 		}
-
-if(isset($_SESSION['answers'])){
-	$list = AnswerList::fromArray(0,$_SESSION['answers']);
-	echo $list -> render();
-}
 ?>

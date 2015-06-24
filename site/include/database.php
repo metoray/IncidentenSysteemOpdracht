@@ -798,6 +798,15 @@ class AnswerList {
 		return $html;
 	}
 
+	public function getTemplate(){
+		$last = $this->answers[count($this->answers)-1];
+		$tmpID = $last -> getIncidentTemplate();
+		if($tmpID){
+			return IncidentTemplate::fromID($tmpID);
+		}
+		return null;
+	}
+
 	public static function fromArray($incidentID,$arr){
 		$list = new AnswerList($incidentID);
 		foreach ($arr as $answer) {
