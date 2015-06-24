@@ -8,11 +8,13 @@
 	$query .= "JOIN leverancier ON (software.lev_id = leverancier.lev_id) ";
 	$query .= "JOIN soort_software ON (software.soort_id = soort_software.soort_s_id) ";
 	$query .= "JOIN producent ON (software.producent_id = producent.prod_id)";
+
+	
 	//Zet de resultaten van query variabel zetten.
-	$result = mysqli_query($con, $query);
+	$result = mysql_query($query);
 
 	//Zet de resultaten van de query in een associative array.
-	while ($software_query = mysqli_fetch_assoc($result)) {
+	while ($software_query = mysql_fetch_assoc($result)) {
 		$software[] = array('SoftwareId' => intval($software_query["software_id"]), 'Identificatiecode' => $software_query["identificatiecode"], 'SoortId' => intval($software_query["soort_id"]), 'ProducentId' => intval($software_query["producent_id"]), 'LeverancierId' => intval($software_query["lev_id"]), 'ServerLicentie' => $software_query["server_licentie"], 'ServerLicentieAantal' => intval($software_query["serverlicenties"]), 'GebruikerLicenties' => intval($software_query["gebruiker_licenties"]), 'LeverancierNaam' => $software_query["naam"], 'SoortSoftware' => $software_query["beschrijving"], 'Producent' => $software_query["prod_naam"]);
 	}
 

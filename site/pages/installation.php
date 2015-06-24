@@ -18,7 +18,7 @@ echo "<br >";
 echo $identification_code;
 echo "<br >";
 
-echo "<a href =/cmdb/hardware/connections?identification_code=".$identification_code."> Verbindingen </a>";
+echo "<a href =connection.php?identification_code=".$identification_code."> Verbindingen </a>";
 
 $sis_step1 = "select hardware_id from hardwarecomponenten where identificationcode = '".$identification_code."' ";
 

@@ -1,11 +1,7 @@
 <?php
 include "include/connect.php";
-
-$user = $_SESSION["user"] ->getID(); 
-
-echo "<br />";
-
-$incidents_query = "select * from incidenten where gebruiker_id = ".$user."";
+$user_id = $_SESSION["user"] -> getID(); 
+$incidents_query = "select * from incidenten where gebruiker_id = ".$user_id."";
 $incidents_result = mysqli_query($con,$incidents_query );
 
 
@@ -52,7 +48,7 @@ while($incidents_row = mysqli_fetch_assoc($incidents_result )	)
 			echo $practitoner_row["naam"];
 		echo "</td>";
 		echo "<td>";
-			echo "<a href=/incidents/existing?inc_id=".$incidents_row["inc_id"].">";
+			echo "<a href=existing_incident.php?".$incidents_row["inc_id"].">";
 			echo $incidents_row["inc_id"];
 			echo "</a>";
 		echo "</td>";
