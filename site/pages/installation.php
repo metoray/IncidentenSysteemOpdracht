@@ -31,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	if(isset($_POST["verwijder_van_installatie"]))
 	{
-	 	$query = "delete from installatie where hardware_id = '".mysql_real_escape_string($sis_step3[0])."' and software_id = ".mysql_real_escape_string($_POST["verwijder_van_installatie"])." ";
+	 	$query = "delete from installatie where hardware_id = '".mysqli_real_escape_string($con,$sis_step3[0])."' and software_id = ".mysqli_real_escape_string($con,$_POST["verwijder_van_installatie"])." ";
 		mysqli_query($con, $query);
 	
 	}
 	if(isset($_POST["voegtoe_aan_installatie"]))
 	{
-		$query = "insert into installatie(hardware_id, software_id) VALUES (".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["voegtoe_aan_installatie"])." )";
+		$query = "insert into installatie(hardware_id, software_id) VALUES (".mysqli_real_escape_string($con,$sis_step3[0])." , ".mysqli_real_escape_string($con,$_POST["voegtoe_aan_installatie"])." )";
 		mysqli_query($con, $query);
 		
 	}
