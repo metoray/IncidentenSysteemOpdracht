@@ -40,10 +40,10 @@ foreach ($incidenten as $i) {
        
             <div class="panel-heading"><center><h1>Welkom <?php echo $_SESSION["user"]->name; ?></h1></center></div>
             <ul class="list-group">
-                <a href="newincident" class="btn btn-primary btn-lg btn-block" role="button">Incident melden</a>
+                <a href="/question" class="btn btn-primary btn-lg btn-block" role="button">Incident melden</a>
                 <a href="myincidents" class="btn btn-primary btn-lg btn-block" role="button">uw gemelde incidenten bekijken</a>
-                <?php if ($_SESSION["user"]->roleID == 4) {
-                    echo '<a href="incidentenoverview" class="btn btn-primary btn-lg btn-block" role="button">Alle incidenten inzien</a>';}?>
+                <?php if ($_SESSION["user"]->hasRight("PROCESS_TICKET")) {
+                    echo '<a href="/incidents/all" class="btn btn-primary btn-lg btn-block" role="button">Alle incidenten inzien</a>';}?>
             </ul>
         
     </div>
