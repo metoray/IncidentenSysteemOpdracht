@@ -61,38 +61,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 	elseif(isset($_POST["send_incident_user"]))
 	{
-	 		$impact = "NULL";
-	 		$urgency = "NULL";
-	 		$priority = "NULL";
-
-	 		if(isset($_SESSION['answers'])){
-	 			$list = AnswerList::fromArray(0,$_SESSION['answers']);
-				$template = $list -> getTemplate();
-				if($template){
-					$impact = $template -> getImpact();
-					$urgency = $template -> getUrgency();
-					$priority = $template -> getPriority();
-				}
-	 		}
-
-	 		$impact = mysqli_real_escape_string($con,$impact);
-	 		$urgency = mysqli_real_escape_string($con,$urgency);
-	 		$priority = mysqli_real_escape_string($con,$priority);
-
+	 	
 			$user			=$_POST["user"];
 			$discription 	=$_POST["description"];	
 			$software 		=$_POST["software"];
 			$hardware 		=$_POST["hardware"];
+		
+			
+			$insert_incident = "insert into incidenten
+			(		 omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			VALUES 
+			(			 '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
+			mysqli_query($con,$insert_incident);
 			$id_query 		="select max(inc_id) from incidenten";
 			$id_result		=mysqli_query($con,$id_query);
 			$id_row			=mysqli_fetch_row($id_result);
-			$id 			=$id_row[0];
-			$id++;	
-			$insert_incident = "insert into incidenten
-			(inc_id				, omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
-			VALUES 
-			(".$id."			, '".$discription."', ".$user."		,".$software."		,1			,{$impact},{$urgency},{$priority},".$hardware."	,NULL )";
-			mysqli_query($con,$insert_incident);
+		//	$id 			=mysqli_insert_id($con);
+			$id				=$id_row[0];
 			$location= "Location:  /incidents/existing??inc_id=".$id." ";
 			header($location);
 	} 
@@ -107,16 +92,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$urgentie		=$_POST["urgentie"];
 			$prioriteit 	=$_POST["prioriteit"];
 			$employee 		=$_POST["practioner"];
+			echo "<br />";
+			echo 'dit is de gebruiker:';
+			echo $_POST["user"];
+		
+			$insert_incident = "insert into incidenten
+			( omschrijving		, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			VALUES 
+			(	 '".$discription."', ".$user."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
+			echo $insert_incident;
+			mysqli_query($con,$insert_incident) or die(mysqli_error());
 			$id_query 		="select max(inc_id) from incidenten";
 			$id_result		=mysqli_query($con,$id_query);
 			$id_row			=mysqli_fetch_row($con,$id_result);
-			$id 			=$id_row[0];
-			$id++;
-			$insert_incident = "insert into incidenten
-			(inc_id			, omschrijving		, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
-			VALUES 
-			(".$id."		, '".$discription."', ".$user."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
-			mysqli_query($con,$insert_incident);
+		//	$id 			=mysqli_insert_id($con);
+			$id				=$id_row[0];
 			$location= "Location: /incidents/existing?inc_id=".$id." ";
 			header($location);
 	}
