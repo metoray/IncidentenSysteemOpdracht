@@ -1,8 +1,4 @@
 <?php
-<<<<<<< HEAD
-	session_start();
-=======
->>>>>>> parent of c5e15d8... bla
 	$user = $_SESSION["user"] ->getID();
 		
 	include "include/connect.php";
