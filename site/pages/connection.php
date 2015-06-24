@@ -5,7 +5,7 @@ Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort 
 s= search = i=hardware_id s=select  */
 
 include "include/connect.php";
-$identification_code="";
+
 if(isset($_GET["identification_code"]))
 {
 	$identification_code = mysqli_real_escape_string($con,$_GET["identification_code"]);
@@ -17,6 +17,10 @@ else
 
 echo "<br >";
 echo $identification_code;
+echo "<br />";
+echo "<a href=/cmdb/hardware/installation?identification_code=".$identification_code." >";
+echo "Installatie";
+echo "</a>";
 $sis_step1 = "select hardware_id,soort_id, locatie_id  from hardwarecomponenten where identificationcode = '".$identification_code."' ";
 
 $sis_step2 = mysqli_query($con,$sis_step1);
@@ -28,15 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	if(isset($_POST["verwijder_van_verbindingen"]))
 	{
-	 	$query = "delete from verbindingen where hardware_id1 = ".mysql_real_escape_string($sis_step3[0])." and hardware_id2 = ".mysql_real_escape_string($_POST["verwijder_van_verbindingen"])." ";
+	 	$query = "delete from verbindingen where hardware_id1 = ".mysqli_real_escape_string($con,$sis_step3[0])." and hardware_id2 = ".mysqli_real_escape_string($con,$_POST["verwijder_van_verbindingen"])." ";
 		mysqli_query($con,$query) or die(mysql_error());
-		$query = "delete from verbindingen where hardware_id1 = ".mysql_real_escape_string($_POST["verwijder_van_verbindingen"])." and hardware_id2 = ".mysql_real_escape_string($sis_step3[0])." ";
+		$query = "delete from verbindingen where hardware_id1 = ".mysqli_real_escape_string($con,$_POST["verwijder_van_verbindingen"])." and hardware_id2 = ".mysqli_real_escape_string($con,$sis_step3[0])." ";
 		mysqli_query($con, $query)or die(mysql_error());
 		
 	}
 	if(isset($_POST["toevoegen_aan_verbindgen"]))
 	{
-		$query = "insert into verbindingen VALUES(".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["toevoegen_aan_verbindgen"])." )";
+		$query = "insert into verbindingen VALUES(".mysqli_real_escape_string($con,$sis_step3[0])." , ".mysqli_real_escape_string($con,$_POST["toevoegen_aan_verbindgen"])." )";
 		mysqli_query($con,$query)or die(mysql_error());
 		
 	}
@@ -51,12 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
  	}  
 	</style>
 	
-	<form action="/cmdb/hardware/connection" method="post" name="verbonden">
+	<form action="/cmdb/hardware/connections" method="post" name="verbonden">
 	<select size ="30"  name="verwijder_van_verbindingen">
         	
 <?php	
 	$connected = array();
 	echo $sis_step3[0];
+	
 	echo "<br />";
 		echo "<br />";
 
@@ -125,16 +130,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$not_connected  = $not_connected.$not;
 	} 
 	$ncbc_query = $not_connected;
+	
 	$ncbc_result = mysqli_query($con,$ncbc_query) or die(mysql_error()); //resultaat = elke hardwarecomponent die niet verbonden is met de huidige hardware. Dit gaat er wel van uit dat de hardwarecomponent verbinding kan maken 
+
 //	met meerdere apparaten 
 	
 ?>
 	
-	<form action="/cmdb/hardware/connection" method="post" name="niet_verbonden">
+	<form action="/cmdb/hardware/connections" method="post" name="niet_verbonden">
 	<select size ="30"  name="toevoegen_aan_verbindgen">
 <?php
 
-	while($ncbc_rows = mysql_fetch_row($ncbc_result))
+	while($ncbc_rows = mysqli_fetch_row($ncbc_result))
 	{
 	 	//deze switch kijk wat voor hardwarecomponent het huidige component is. Op basis van dit wordt een specifiek aantal instructies uitgevoerd.
 	 	if($ncbc_rows[0] !=  $sis_step3[0])
@@ -206,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				}
 	 		break;
 			};
-		}
+	}
 }
 	 /* 	EINDE CODE VOOR LOKALE HARDWARECOMPONENTEN
 		 	START CODE VOOR ROUTERS EN FIREWALLS BUITEN LOCATIE		*/
@@ -234,12 +241,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 			 	
 				?>
-					<option value = <?php echo $blh_rows[0]; ?> > Het probleem 2<?php echo $blh_rows[1]; ?>  </option>
+					<option value = <?php echo $blh_rows[0]; ?> ><?php echo $blh_rows[1]; ?>  </option>
 				<?php
 			}
 			}
 		};
 	};
+	
 	echo "</select> ";
     echo "<br />"; 
     
