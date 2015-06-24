@@ -1,6 +1,6 @@
 <?php
 
-iinclude "include/connect.php";
+include "include/connect.php";
 $current_incident 	= $_GET["inc_id"];
 $search_current 	= "select * from incidenten where inc_id = ".$current_incident."";
 $current_result 	= mysqli_query($con,$search_current) or die(mysql_error());
