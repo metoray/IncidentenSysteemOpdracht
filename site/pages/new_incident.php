@@ -1,6 +1,4 @@
 <?php
-
-	session_start();
 	$user = $_SESSION["user"] ->getID();
 		
 	include "include/connect.php";
