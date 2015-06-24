@@ -614,6 +614,10 @@ class Answer{
 		$this->template = $tmp;
 	}
 
+	public function getQuestion(){
+		return Question::fromID($this->qid);
+	}
+
 	public function delete(){
 		global $db;
 		$stmt = $db -> prepare('DELETE FROM antwoord WHERE id=:id');
@@ -757,6 +761,49 @@ class IncidentTemplate{
 			$questions[] = new IncidentTemplate($row['omschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
 		}
 		return $questions;
+	}
+
+}
+
+class AnswerList {
+
+	public function __construct($incidentID){
+		$this -> incidentID = $incidentID;
+		$this -> answers = array();
+	}
+
+	public function save(){
+		$stmt = $db -> prepare("INSERT INTO gebruikers_antwoorden (antwoord_id,inc_id,reeks_nummer) VALUES (:aid,:iid,:n)");
+		$i = 1;
+		foreach ($answers as $answer) {
+			$stmt -> bindValue('aid',$answer->getID(),PDO::PARAM_INT);
+			$stmt -> bindValue('iid',$this->incidentID,PDO::PARAM_INT);
+			$stmt -> bindValue('n',$i,PDO::PARAM_INT);
+			$i++;
+		}
+	}
+
+	public function addAnswer($answer){
+		$this -> answers[] = $answer;
+	}
+
+	public function render(){	//this code is implemented here because code quality varies throughout this project
+		$html = "<dl>";
+		foreach ($this->answers as $answer) {
+			$questionText = $answer->getQuestion()->getText();
+			$answerText = $answer->getText();
+			$html.= "<dt>{$questionText}</dt><dd>{$answerText}</dd>";
+		}
+		$html.= "</dl>";
+		return $html;
+	}
+
+	public static function fromArray($incidentID,$arr){
+		$list = new AnswerList($incidentID);
+		foreach ($arr as $answer) {
+			$list -> addAnswer($answer);
+		}
+		return $list;
 	}
 
 }
