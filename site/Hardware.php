@@ -12,10 +12,10 @@
 
 	
 	//Zet de resultaten van query variabel zetten.
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 
 	//Zet de resultaten van de query in een associative array.
-	while ($hardware_query = mysql_fetch_assoc($result)) {
+	while ($hardware_query = mysqli_fetch_assoc($result)) {
 		$Hardware[] = array('HardwareId' => intval($hardware_query["hardware_id"]), 'Identificatiecode' => $hardware_query["identificationcode"], 'SoortId' => intval($hardware_query["soort_id"]), 'LocatieId' => intval($hardware_query["locatie_id"]), 'MerkId' => intval($hardware_query["merk_id"]), 'LeverancierId' => intval($hardware_query["leverancier_id"]), 'JaarVanAanschaf' => $hardware_query["jaar_van_aanschaf"], 'LeverancierNaam' => $hardware_query["naam"], 'SoortHardware' => $hardware_query["beschrijving"], 'MerkNaam' => $hardware_query["merk_naam"], 'Locatie' => $hardware_query["locatie_naam"]);
 	}
 
