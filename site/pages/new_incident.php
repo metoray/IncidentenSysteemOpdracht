@@ -59,7 +59,7 @@
 			<?php
 			echo "<br />";
 			?>
-			<input type="hidden" name="user" value=<?php echo $user_row[0]; ?>	> 
+		
 			<input type="submit" name="send_incident_user" value = "Verwerk">
 			</form>
 			<?php
