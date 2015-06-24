@@ -48,7 +48,7 @@ while($incidents_row = mysqli_fetch_assoc($incidents_result )	)
 			echo $practitoner_row["naam"];
 		echo "</td>";
 		echo "<td>";
-			echo "<a href=existing_incident.php?".$incidents_row["inc_id"].">";
+			echo "<a href=/incidents/existing?inc_id=".$incidents_row["inc_id"].">";
 			echo $incidents_row["inc_id"];
 			echo "</a>";
 		echo "</td>";

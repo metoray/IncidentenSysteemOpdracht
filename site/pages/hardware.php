@@ -24,7 +24,7 @@
 	echo '<table class="table table-striped"><thead><tr><th>Identificatiecode</th><th>Soort hardware</th><th>Locatie</th><th>Merk</th></th><th>Leverancier</th></th><th>Aanschaf datum </th></th></tr></thead>';
 
 	foreach ($Hardware as $i) {
-		echo "<tr><td><a href=/cmdb/hardware/installation?identification_code=".$i['Identificatiecode']. "\">". $i['Identificatiecode']. "</a></td><td>". $i['SoortHardware']. "</td><td>". $i['Locatie']. "</td><td>". $i['MerkNaam']. "</td></td><td>". $i['LeverancierNaam']. "</td></td><td>". $i['JaarVanAanschaf']. "</td></td></tr>";
+		echo "<tr><td><a href=/cmdb/hardware/installation?identification_code=".$i['Identificatiecode']." \">". $i['Identificatiecode']. "</a></td><td>". $i['SoortHardware']. "</td><td>". $i['Locatie']. "</td><td>". $i['MerkNaam']. "</td></td><td>". $i['LeverancierNaam']. "</td></td><td>". $i['JaarVanAanschaf']. "</td></td></tr>";
 	}
 	echo "</table>";
 ?>
