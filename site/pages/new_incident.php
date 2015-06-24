@@ -9,10 +9,18 @@
 	$user_row =  mysqli_fetch_row($user_result);
 
 	$text = "";
+	$imp = null;
+	$urg = null;
+	$pri = null;
 	if(isset($_SESSION['answers'])){
 		$list = AnswerList::fromArray(0,$_SESSION['answers']);
 		$template = $list -> getTemplate();
-		if($template) $text = $template -> getText();
+		if($template){
+			$text = $template -> getText();
+			$imp = $template -> getImpact();
+			$urg = $template -> getUrgency();
+			$pri = $template -> getPriority();
+		}
 		echo $list -> render();
 	}
 
@@ -115,11 +123,12 @@
 			echo "<br />";
 			echo "<br />";
 
-			foreach (array('impact','urgentie','prioriteit') as $aspect) {
+			foreach (array('impact'=>$imp,'urgentie'=>$urg,'prioriteit'=>$pri) as $aspect => $default) {
 				echo ucfirst($aspect).":";
 				echo "<select name=\"{$aspect}\">";
 				for($x = 1; $x<4; $x++){
-					echo "<option value =".$x."> ".$x."</option>";
+					$selected = ($x==$default)?' selected':'';
+					echo "<option value =".$x."{$selected}> ".$x."</option>";
 				}
 				echo "</select>";	
 			}
