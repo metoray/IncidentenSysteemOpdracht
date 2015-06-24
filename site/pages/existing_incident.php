@@ -10,7 +10,7 @@ $current_row 		= mysqli_fetch_row($current_result);
 ?>
 <html>
 	<body>
-		
+		<div class="col-md-6">
 		<?php
 	
 			$search_practitoner = "select naam from gebruikers where ".$current_row[12]."";
@@ -38,18 +38,25 @@ $current_row 		= mysqli_fetch_row($current_result);
 			echo "Eind incident:	";
 			echo $current_row[5];
 		?>
-	
-		<br />
-		
-		Beschrijving:
-		<br />
-		<textarea rows="25" cols="100" name="description" form="edit_problem"  disabled><?php echo	$current_row[2] ?> </textarea>
-		<br />
-		Workaround:
-		<br />
-		<textarea rows="25" cols="100" name="solution" form="edit_problem"  disabled><?php echo	$current_row[3] ?> </textarea>
-		<br />
-	
+		</div>
+		<div class="col-md-6">
+		<?php
+			$answers = AnswerList::fromIncident($_GET["inc_id"]);
+			echo $answers -> render();
+		?>
+		</div>
+		<div class="col-md-12">
+			<br />
+			
+			Beschrijving:
+			<br />
+			<textarea rows="25" cols="100" name="description" form="edit_problem"  disabled><?php echo	$current_row[2] ?> </textarea>
+			<br />
+			Workaround:
+			<br />
+			<textarea rows="25" cols="100" name="solution" form="edit_problem"  disabled><?php echo	$current_row[3] ?> </textarea>
+			<br />
+		</div>
 	
 		
 

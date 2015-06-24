@@ -821,12 +821,12 @@ class AnswerList {
 
 	public static function fromIncident($incidentID){
 		global $db;
-		$stmt = $db -> prepare("SELECT * FROM gebruikers_antwoorden WHERE inc_id=:iid ORDER BY reeks_nummer;");
+		$stmt = $db -> prepare("SELECT * FROM gebruikers_antwoorden ga JOIN antwoord a ON (ga.antwoord_id = a.id) WHERE inc_id=:iid ORDER BY reeks_nummer;");
 		$stmt -> bindValue('iid',$incidentID,PDO::PARAM_INT);
 		$stmt -> execute();
 		$answers = array();
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-			$answers[] = new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$this->id,$row['id']);
+			$answers[] = new Answer($row['tekst'],$row['vervolg_vraag_id'],$row['default_ticket_id'],$row['vraag_id'],$row['id']);
 		}
 		return AnswerList::fromArray($incidentID,$answers);
 	}

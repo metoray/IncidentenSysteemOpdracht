@@ -363,9 +363,13 @@
 	//Tabel voor de gekoppelde vragen
 	echo "<table>";
 
-	//Vragen
-	echo "<tr><td>Vragen:</td></tr>";
-	echo "<tr><td><input type=\"text\" name=\"vragen\" value=\"Vragen stuk moet nog gemaakt worden. Kan allemaal later!\"></td></tr>";
+	$answers = AnswerList::fromIncident($_GET["incidentid"]);
+	$aText = $answers -> render();
+
+	if($aText){
+		echo "Vragen<br/>";
+		echo $aText;
+	}
 
 	echo "</table>";
 
