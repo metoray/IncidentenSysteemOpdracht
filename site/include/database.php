@@ -776,7 +776,7 @@ class AnswerList {
 		global $db;
 		$stmt = $db -> prepare("INSERT INTO gebruikers_antwoorden (antwoord_id,inc_id,reeks_nummer) VALUES (:aid,:iid,:n)");
 		$i = 1;
-		foreach ($answers as $answer) {
+		foreach ($this->answers as $answer) {
 			$stmt -> bindValue('aid',$answer->getID(),PDO::PARAM_INT);
 			$stmt -> bindValue('iid',$this->incidentID,PDO::PARAM_INT);
 			$stmt -> bindValue('n',$i,PDO::PARAM_INT);
