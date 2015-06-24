@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		
 	</style>
 	
-	<form action="installation.php" method="post" name="installatie">
+	<form action="http://database.rickvenema.nl/cmdb/hardware/installation" method="post" name="installatie">
 	<select size ="30"  name="verwijder_van_installatie">
         	
 <?php	
@@ -83,8 +83,7 @@ s=search a= all hardware s=and software*/
         array_push($installed, $spn_step3[0]);
     };
     echo "</select> ";  //sluit de select menu af
-      echo "<br />"; 	
-    
+    echo "<br />"; 	
 ?>  
 	<input type="hidden" name="installation" value="<?php echo $identification_code; ?>"	>  
 	<input type="submit" name="remove_program" value = "'     >       '">
@@ -100,7 +99,7 @@ s=search a= all hardware s=and software*/
 	$nig_step2 = mysqli_query($con,$niq_step1);
 ?>
 	
-	<form action="installation.php" method="post" name="niet_geinstalleerd">
+	<form action="http://database.rickvenema.nl/cmdb/hardware/installation" method="post" name="niet_geinstalleerd">
 	<select size ="30"  name="voegtoe_aan_installatie">
 <?php
 	while($row2 = mysqli_fetch_assoc($nig_step2))
