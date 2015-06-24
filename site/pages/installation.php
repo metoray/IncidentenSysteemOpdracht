@@ -3,12 +3,10 @@
 Dit eerste deel is bedoeld om de hardware_id die bij de identficationcode hoort te achterhalen.
 
 s= search = i=hardware_id s=select  */
-
 include "include/connect.php";
- // = mysql_escape_string($_GET["$identification_code"]);
 if(isset($_GET["identification_code"]))
 {
-	$identification_code = mysql_real_escape_string($_GET["identification_code"]);
+	$identification_code = mysqli_real_escape_string($_GET["identification_code"]);
 }
 else
 {
@@ -21,21 +19,11 @@ echo $identification_code;
 echo "<br >";
 
 echo "<a href =connection.php?identification_code=".$identification_code."> Verbindingen </a>";
-/*
-echo "<table>";
-echo "<tr>";
-	echo "<td>";
 
-	echo "</td>";
-		echo "<td>";
-
-	echo "</td>";
-echo "</tr>";
-*/
 $sis_step1 = "select hardware_id from hardwarecomponenten where identificationcode = '".$identification_code."' ";
 
-$sis_step2 = mysql_query($sis_step1);
-$sis_step3 = mysql_fetch_row($sis_step2);
+$sis_step2 = mysqli_query($con,$sis_step1);
+$sis_step3 = mysqli_fetch_row($sis_step2);
 // Er zou maar 1 resultaat van moeten komen. 
 
 //Dit verwerkt een post als die er is. Het moet na de sis_set3 komen zodat de goede hardware_id kan worden gebruikt.
@@ -44,13 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if(isset($_POST["verwijder_van_installatie"]))
 	{
 	 	$query = "delete from installatie where hardware_id = '".mysql_real_escape_string($sis_step3[0])."' and software_id = ".mysql_real_escape_string($_POST["verwijder_van_installatie"])." ";
-		mysql_query($query);
+		mysqli_query($con, $query);
 	
 	}
 	if(isset($_POST["voegtoe_aan_installatie"]))
 	{
 		$query = "insert into installatie(hardware_id, software_id) VALUES (".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["voegtoe_aan_installatie"])." )";
-		mysql_query($query);
+		mysqli_query($con, $query);
 		
 	}
 };
@@ -79,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 /* Nu gaan we alle rows achterhalen waar er iets is geinstalleerd op deze hardwarecomponent.
 s=search a= all hardware s=and software*/
 	$sas_step1 = "select * from installatie where hardware_id = ".$sis_step3[0]." ";
-	$sas_step2 = mysql_query($sas_step1);
-	while($row = mysql_fetch_assoc($sas_step2)) 
+	$sas_step2 = mysqli_query($con, $sas_step1);
+	while($row = mysqli_fetch_assoc($sas_step2)) 
 	{ 
     	//Nu moeten we zoeken naar de naam van het programma.
         // spn = search program name 
         $spn_step1 = " select identificatiecode, beschrijving, software_id from software stw , soort_software ssd where software_id = ".$row["software_id"]." and stw.soort_id = ssd.soort_s_id ";
-        $spn_step2 = mysql_query($spn_step1);
-		$spn_step3 = mysql_fetch_row($spn_step2);
+        $spn_step2 = mysqli_query($con, $spn_step1);
+		$spn_step3 = mysqli_fetch_row($spn_step2);
 			
         ?>
         <option value = <?php echo $spn_step3[2]; ?> > <?php echo $spn_step3[0]; ?>  Beschrijving: <?php echo $spn_step3[1]; ?>   </option>
@@ -109,19 +97,19 @@ s=search a= all hardware s=and software*/
 		$not = " and !(identificatiecode = '".$program."' )";
 		$niq_step1 = $niq_step1.$not;
 	};
-	$nig_step2 = mysql_query($niq_step1);
+	$nig_step2 = mysqli_query($con,$niq_step1);
 ?>
 	
 	<form action="installation.php" method="post" name="niet_geinstalleerd">
 	<select size ="30"  name="voegtoe_aan_installatie">
 <?php
-	while($row2 = mysql_fetch_assoc($nig_step2))
+	while($row2 = mysqli_fetch_assoc($nig_step2))
 	{
 	 	//spn for not installed = nispn
 	 	$nispn_step1 = " select identificatiecode, beschrijving, software_id from software stw , soort_software ssd where software_id = ".$row2["software_id"]." and stw.soort_id = ssd.soort_s_id ";
 	 
-	 	$nispn_step2 = mysql_query($nispn_step1);
-		$nispn_step3 = mysql_fetch_row($nispn_step2);
+	 	$nispn_step2 = mysqli_query($con,$nispn_step1);
+		$nispn_step3 = mysqli_fetch_row($nispn_step2);
 	 	?>
         <option value = <?php echo $nispn_step3[2]; ?> >  <?php echo $nispn_step3[0]; ?>  Beschrijving: <?php echo $nispn_step3[1]; ?> </option>
         <?php

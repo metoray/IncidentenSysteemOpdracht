@@ -1,11 +1,11 @@
 <?php
-$connect			=new mysqli('localhost', 'root', '', 'rick_hondsrug');
-$db =mysql_select_db( "rick_hondsrug");
+
+include "include/connect.php";
 /*$_session_start();
 $user = $_SESSION["user"] ->getID(); */
 $user_id= 10;
 $problems_query = "select * from probleem";
-$problems_result = mysqli_query($connect,$problems_query );
+$problems_result = mysqli_query($con,$problems_query );
 
 
 echo "<table border=1>";
@@ -43,13 +43,13 @@ while($problems_row = mysqli_fetch_assoc($problems_result )	)
 		echo "</td>";
 		echo "<td>";
 			$practitoner_name_query	="select naam from gebruikers where gebruiker_id =".$problems_row["medewerker"]."";
-			$practitoner_name_result=mysqli_query($connect, $practitoner_name_query);
+			$practitoner_name_result=mysqli_query($con, $practitoner_name_query);
 			$practitoner_row		=mysqli_fetch_assoc($practitoner_name_result);
 			echo $practitoner_row["naam"];
 		echo "</td>";
 		echo "<td>";
 			$status_query = "select status from statussen_probleem where id = ".$problems_row["status"]."";
-			$status_result= mysqli_query($connect, $status_query);
+			$status_result= mysqli_query($con, $status_query);
 			$status_row = mysqli_fetch_assoc($status_result);
 			echo $status_row["status"];
 		echo "</td>";
@@ -68,6 +68,5 @@ while($problems_row = mysqli_fetch_assoc($problems_result )	)
 	echo "</tr>";
 }
 
-echo "</tr>";
 echo "</table>";
 ?>
