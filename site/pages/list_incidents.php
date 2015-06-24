@@ -1,6 +1,5 @@
 <?php
 include "include/connect.php";
-session_start();
 $user = $_SESSION["user"] ->getID(); 
 $incidents_query = "select * from incidenten where gebruiker_id = ".$user_id."";
 $incidents_result = mysqli_query($con,$incidents_query );
