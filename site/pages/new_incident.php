@@ -1,15 +1,14 @@
 <?php
-	/*
+
 	$_session_start();
-	$_session["user"];
 	$user = $_SESSION["user"] ->getID();
-		*/
+		
 	include "include/connect.php";
-	$user= 203;
+	
 	$query_user = "select * from gebruikers where gebruiker_id= ".$user."";
 
-	$user_result = mysql_query($query_user) or die(mysql_error());
-	$user_row =  mysql_fetch_row($user_result);
+	$user_result = mysqli_query($con,$query_user) or die(mysql_error());
+	$user_row =  mysqli_fetch_row($user_result);
 	
 	 	if($user_row[5] == 1)
 	 	{
@@ -18,22 +17,22 @@
 			<form action="process.php" method="post" id="send_incident_user">
 			<?php
 			$hardware_query = "select hardware_id, identificationcode from hardwarecomponenten where (soort_id =3 or soort_id=4 or soort_id=8 or soort_id = 9) order by locatie_id ";
-			$hardware_result= mysql_query($hardware_query);
+			$hardware_result= mysqli_query($con,$hardware_query);
 			echo "Hardware";
 			echo "<select name=hardware>";
-			while($hardware_row = mysql_fetch_row($hardware_result))
+			while($hardware_row = mysqli_fetch_row($hardware_result))
 			{
 				echo "<option value=".$hardware_row[0]."> ".$hardware_row[1]."</option>";
 			}
 			
 			echo "</select>";
 			$software_query = "select software_id, identificatiecode from software ";
-			$software_result= mysql_query($software_query);
+			$software_result= mysqli_query($con,$software_query);
 			echo "<br />";
 			echo "Software";
 			echo "<select name=software>";
 			echo "<option value=NULL>Hardware probleem </option>";
-			while($software_row = mysql_fetch_row($software_result))
+			while($software_row = mysqli_fetch_row($software_result))
 			{
 				echo "<option value=".$software_row[0]."> ".$software_row[1]."</option>";
 			}
@@ -60,9 +59,9 @@
 			<?php
 			echo "Gebruiker			";
 			$user_query = "select * from gebruikers";
-			$user_result=mysqL_query($user_query);
+			$user_result=mysqLi_query($con,$user_query);
 			echo "<select name=user>";
-			while($user_row = mysql_fetch_row($user_result))
+			while($user_row = mysqli_fetch_row($user_result))
 			{
 				echo "<option value=".$user_row[0]."> ".$user_row[1]."</option>";
 			}
@@ -70,9 +69,9 @@
 			echo "<br />";
 			echo "Behandelaar";
 			$practioner_query = "select * from gebruikers where not rol_id =1 ";
-			$practioner_result=mysqL_query($practioner_query);
+			$practioner_result=mysqli_query($con,$practioner_query);
 			echo "<select name=practioner>";
-			while($practioner_row = mysql_fetch_row($practioner_result))
+			while($practioner_row = mysqli_fetch_row($practioner_result))
 			{
 			
 			 	if($practioner_row[0] == $user )
@@ -88,21 +87,21 @@
 			echo "<br />";
 			
 			$hardware_query = "select hardware_id, identificationcode from hardwarecomponenten where (soort_id =3 or soort_id=4 or soort_id=8 or soort_id = 9) order by locatie_id ";
-			$hardware_result= mysql_query($hardware_query);
+			$hardware_result= mysqli_query($con,$hardware_query);
 			echo "Hardware			";
 			echo "<select name=hardware>";
-			while($hardware_row = mysql_fetch_row($hardware_result))
+			while($hardware_row = mysqli_fetch_row($hardware_result))
 			{
 				echo "<option value=".$hardware_row[0]."> ".$hardware_row[1]."</option>";
 			}
 			echo "</select>";
 			$software_query = "select software_id, identificatiecode from software ";
-			$software_result= mysql_query($software_query);
+			$software_result= mysqli_query($con,$software_query);
 			echo "<br />";
 			echo "Software			";
 			echo "<select name=software>";
 			echo "<option value=NULL>Hardware probleem </option>";
-			while($software_row = mysql_fetch_row($software_result))
+			while($software_row = mysqli_fetch_row($con,$software_result))
 			{
 				echo "<option value=".$software_row[0]."> ".$software_row[1]."</option>";
 			}
