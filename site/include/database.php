@@ -799,10 +799,12 @@ class AnswerList {
 	}
 
 	public function getTemplate(){
-		$last = $this->answers[count($this->answers)-1];
-		$tmpID = $last -> getIncidentTemplate();
-		if($tmpID){
-			return IncidentTemplate::fromID($tmpID);
+		if(count($this->answers)>0){
+			$last = $this->answers[count($this->answers)-1];
+			$tmpID = $last -> getIncidentTemplate();
+			if($tmpID){
+				return IncidentTemplate::fromID($tmpID);
+			}
 		}
 		return null;
 	}
