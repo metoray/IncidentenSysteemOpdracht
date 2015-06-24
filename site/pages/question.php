@@ -3,6 +3,7 @@ if(isset($_GET['a'])){
 	$answer = Answer::fromID($_GET['a']);
 	print_r($answer);
 	if($answer){
+		$_SESSION['answers'][] = $answer;
 		if($answer->getNext()){
 			$questionID = $answer -> getNext();
 		}
@@ -14,6 +15,7 @@ if(isset($_GET['a'])){
 }
 else {
 	$questionID = 1;
+	$_SESSION['answers'] = array();
 }
 
 if(!isset($questionID)){
