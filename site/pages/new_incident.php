@@ -75,9 +75,11 @@
 			$user_query = "select * from gebruikers";
 			$user_result=mysqLi_query($con,$user_query);
 			echo "<select name=user>";
+			$test;
 			while($user_row = mysqli_fetch_row($user_result))
 			{
 				echo "<option value=".$user_row[0]."> ".$user_row[1]."</option>";
+				$test = $user_row[0];
 			}
 			echo "</select>"; 	
 			echo "<br />";
@@ -142,7 +144,7 @@
 			<?php
 			echo "<br />";
 			?>
-			<input type="hidden" name="user" value=<?php echo $user_row[0]; ?>	> 
+		
 			<input type="submit" name="send_incident_practioner" value = "Verwerk">
 			</form>
 			<?php
