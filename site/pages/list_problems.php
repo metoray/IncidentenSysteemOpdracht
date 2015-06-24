@@ -6,30 +6,32 @@ $problems_query = "select * from probleem";
 $problems_result = mysqli_query($con,$problems_query );
 
 
-echo "<table border=1>";
-echo "<tr>";
-	echo "<td>";
-		echo "ID";
-	echo "</td>";
-	echo "<td>";
-		echo "Behandelaar";
-	echo "</td>";
-	echo "<td>";
-		echo "Status";
-	echo "</td>";
-	echo "<td>";
-		echo "Beschrijving";
-	echo "</td>";
-	echo "<td>";
-		echo "Oplossing";
-	echo "</td>";
-	echo "<td>";
-		echo "Begin Datum";
-	echo "</td>";
-	echo "<td>";
-		echo "Eind datum";
-	echo "</td>";
-echo "</tr>";	
+echo "<table class=\"table table-striped\">";
+echo "<thead>";
+	echo "<tr>";
+		echo "<th>";
+			echo "ID";
+		echo "</th>";
+		echo "<th>";
+			echo "Behandelaar";
+		echo "</th>";
+		echo "<th>";
+			echo "Status";
+		echo "</th>";
+		echo "<th>";
+			echo "Beschrijving";
+		echo "</th>";
+		echo "<th>";
+			echo "Oplossing";
+		echo "</th>";
+		echo "<th>";
+			echo "Begin Datum";
+		echo "</th>";
+		echo "<th>";
+			echo "Eind datum";
+		echo "</th>";
+	echo "</tr>";
+echo "<thead>";
 
 while($problems_row = mysqli_fetch_assoc($problems_result )	)
 {

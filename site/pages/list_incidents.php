@@ -5,29 +5,32 @@ $incidents_query = "select * from incidenten where gebruiker_id = ".$user_id."";
 $incidents_result = mysqli_query($con,$incidents_query );
 
 
-echo "<table border=1>";
+echo "<table class=\"table table-striped\">";
 echo "<tr>";
-	echo "<td>";
-		echo "Gebruiker";
-	echo "</td>";
-	echo "<td>";
-		echo "Behandelaar";
-	echo "</td>";
-	echo "<td>";
-		echo "Incident code";
-	echo "</td>";
-	echo "<td>";
-		echo "Start incident";
-	echo "</td>";
-	echo "<td>";
-		echo "Eind incident";
-	echo "</td>";
-	echo "<td>";
-		echo "omschrijving";
-	echo "</td>";
-	echo "<td>";
-		echo "Workaround";
-	echo "</td>";
+	echo "<thead>";
+		echo "<th>";
+			echo "Gebruiker";
+		echo "</th>";
+		echo "<th>";
+			echo "Behandelaar";
+		echo "</th>";
+		echo "<th>";
+			echo "Incident code";
+		echo "</th>";
+		echo "<th>";
+			echo "Start incident";
+		echo "</th>";
+		echo "<th>";
+			echo "Eind incident";
+		echo "</th>";
+		echo "<th>";
+			echo "omschrijving";
+		echo "</th>";
+		echo "<th>";
+			echo "Workaround";
+		echo "</th>";
+	echo "</thead>";
+echo "</tr>";
 
 while($incidents_row = mysqli_fetch_assoc($incidents_result )	)
 {
