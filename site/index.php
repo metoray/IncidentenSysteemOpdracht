@@ -7,10 +7,15 @@ $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $path = explode('/', preg_split("/[?#]/",$path)[0]);
 
 $user = isset($_SESSION['user'])?$_SESSION['user']:null;
-if($user==null||!$path){
+if($user==null){
 	header('Location: /login.php');
 	die();
 }
+if(count($path)==1 && $path[0] == ""){
+	header('Location: /home');
+	die();
+}
+
 $root = Page::getPageStructure();
 $currentPage = $root->find($path);
 $content = "Page not found!";
