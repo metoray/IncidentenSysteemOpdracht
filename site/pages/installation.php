@@ -6,7 +6,7 @@ s= search = i=hardware_id s=select  */
 include "include/connect.php";
 if(isset($_GET["identification_code"]))
 {
-	$identification_code = mysqli_real_escape_string($_GET["identification_code"]);
+	$identification_code = mysqli_real_escape_string($con,$_GET["identification_code"]);
 }
 else
 {
