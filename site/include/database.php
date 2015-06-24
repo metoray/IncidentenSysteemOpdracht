@@ -773,6 +773,7 @@ class AnswerList {
 	}
 
 	public function save(){
+		global $db;
 		$stmt = $db -> prepare("INSERT INTO gebruikers_antwoorden (antwoord_id,inc_id,reeks_nummer) VALUES (:aid,:iid,:n)");
 		$i = 1;
 		foreach ($answers as $answer) {
