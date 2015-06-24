@@ -780,6 +780,7 @@ class AnswerList {
 			$stmt -> bindValue('aid',$answer->getID(),PDO::PARAM_INT);
 			$stmt -> bindValue('iid',$this->incidentID,PDO::PARAM_INT);
 			$stmt -> bindValue('n',$i,PDO::PARAM_INT);
+			$stmt -> execute();
 			$i++;
 		}
 	}
