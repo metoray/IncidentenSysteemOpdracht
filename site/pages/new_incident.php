@@ -1,4 +1,6 @@
 <?php
+
+	session_start();
 	$user = $_SESSION["user"] ->getID();
 		
 	include "include/connect.php";
@@ -106,16 +108,30 @@
 			echo "</select>";
 			echo "<br />";
 			echo "<br />";
-
-			foreach (array('impact','urgentie','prioriteit') as $aspect) {
-				echo ucfirst($aspect).":";
-				echo "<select name=\"{$aspect}\">";
-				for($x = 1; $x<4; $x++){
-					echo "<option value =".$x."> ".$x."</option>";
-				}
-				echo "</select>";	
+			echo "Impact:";
+			echo "<select name=impact>";
+			for($i = 1; $i<6; $i++)
+			{
+				echo "<option value =".$i."> ".$i."</option>";
+				
 			}
-
+			echo "</select>";
+			echo "Urgentie:";
+			echo "<select name=urgentie>";
+			for($j = 1; $j<6; $j++)
+			{
+				echo "<option value =".$j."> ".$j."</option>";
+				
+			}
+			echo "</select>";
+			echo "Prioriteit:";
+			echo "<select name=prioriteit>";
+			for($x = 1; $x<6; $x++)
+			{
+				echo "<option value =".$x."> ".$x."</option>";
+				
+			}
+			echo "</select>";
 			echo "<br />";
 			echo "Beschrijving";
 			echo "<br />";
@@ -130,9 +146,4 @@
 			</form>
 			<?php
 		}
-
-if(isset($_SESSION['answers'])){
-	$list = AnswerList::fromArray(0,$_SESSION['answers']);
-	echo $list -> render();
-}
 ?>
