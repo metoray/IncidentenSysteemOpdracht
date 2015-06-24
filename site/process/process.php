@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$urgentie		=$_POST["urgentie"];
 			$prioriteit 	=$_POST["prioriteit"];
 			$employee 		=$_POST["practioner"];
-			$start_inc			=date("Y-m-d H:i:s") ;
+			$start_inc		=date("Y-m-d H:i:s") ;
 		
 			$insert_incident = "insert into incidenten
 			( omschrijving		,start_incident, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
