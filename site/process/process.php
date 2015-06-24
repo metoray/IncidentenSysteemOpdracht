@@ -66,19 +66,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$discription 	=$_POST["description"];	
 			$software 		=$_POST["software"];
 			$hardware 		=$_POST["hardware"];
-		
+			$start_inc			=date("Y-m-d H:i:s") ;
 			
 			$insert_incident = "insert into incidenten
 			(		 omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
-			(			 '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
+			(			 '".$discription."','".$start_inc."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
 			mysqli_query($con,$insert_incident);
 			$id_query 		="select max(inc_id) from incidenten";
 			$id_result		=mysqli_query($con,$id_query);
 			$id_row			=mysqli_fetch_row($id_result);
 		//	$id 			=mysqli_insert_id($con);
 			$id				=$id_row[0];
-			$location= "Location:  /incidents/existing??inc_id=".$id." ";
+			$location= "Location:  /incidents/existing?inc_id=".$id." ";
 			header($location);
 	} 
 	elseif(isset($_POST["send_incident_practioner"]))
@@ -92,11 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$urgentie		=$_POST["urgentie"];
 			$prioriteit 	=$_POST["prioriteit"];
 			$employee 		=$_POST["practioner"];
+			$start_inc			=date("Y-m-d H:i:s") ;
 		
 			$insert_incident = "insert into incidenten
-			( omschrijving		, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			( omschrijving		,start_incident, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
-			(	 '".$discription."' , ".$user_id."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
+			(	 '".$discription."' , '".$start_inc."' ,".$user_id."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
 			echo $insert_incident;
 			mysqli_query($con,$insert_incident) or die(mysqli_error());
 		/*	$id_query 		="select max(inc_id) from incidenten";
