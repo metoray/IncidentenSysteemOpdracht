@@ -1,11 +1,9 @@
 <?php
-$connect			=new mysqli('localhost', 'root', '', 'rick_hondsrug');
-$db =mysql_select_db( "rick_hondsrug");
-$_session_start();
-$user = $_SESSION["user"] ->getID();
-//$user_id= 10;
+include "include/connect.php";
+session_start();
+$user = $_SESSION["user"] ->getID(); 
 $incidents_query = "select * from incidenten where gebruiker_id = ".$user_id."";
-$incidents_result = mysqli_query($connect,$incidents_query );
+$incidents_result = mysqli_query($con,$incidents_query );
 
 
 echo "<table border=1>";
@@ -37,13 +35,13 @@ while($incidents_row = mysqli_fetch_assoc($incidents_result )	)
 	echo "<tr>";
 		echo "<td>";
 			$user_name_query 	="select naam from gebruikers where gebruiker_id = ".$incidents_row["gebruiker_id"]."";
-			$user_name_result 	=mysqli_query($connect, $user_name_query);
+			$user_name_result 	=mysqli_query($con, $user_name_query);
 			$user_name_row		=mysqli_fetch_assoc($user_name_result);
 			echo $user_name_row["naam"];	
 		echo "</td>";
 		echo "<td>";
 			$practitoner_name_query	="select naam from gebruikers where gebruiker_id =".$incidents_row["medewerker_id"]."";
-			$practitoner_name_result=mysqli_query($connect, $practitoner_name_query);
+			$practitoner_name_result=mysqli_query($con, $practitoner_name_query);
 			$practitoner_row		=mysqli_fetch_assoc($practitoner_name_result);
 			echo $practitoner_row["naam"];
 		echo "</td>";

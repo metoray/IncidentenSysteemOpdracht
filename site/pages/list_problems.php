@@ -1,9 +1,7 @@
 <?php
 
 include "include/connect.php";
-/*$_session_start();
-$user = $_SESSION["user"] ->getID(); */
-$user_id= 10;
+
 $problems_query = "select * from probleem";
 $problems_result = mysqli_query($con,$problems_query );
 

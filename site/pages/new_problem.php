@@ -1,7 +1,7 @@
 <?php
-include "connect.php";
+include "include/connect.php";
 $search_practitoner = "select * from gebruikers where rol_id = 2";
-$practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
+$practitoner_result = mysqli_query($con,$search_practitoner) or die(mysql_error());
 ?>
 <html>
 	<body>
@@ -18,12 +18,12 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 				<?php
 			}
 			$search_statussen_probleem = "select * from statussen_probleem";
-			$search_statussen_probleem_result = mysql_query($search_statussen_probleem) or die(mysql_error());
+			$search_statussen_probleem_result = mysqli_query($con,$search_statussen_probleem) or die(mysql_error());
 		?>
 		</select>
 		<select name ="status">
 		<?php
-			while($search_statussen_probleem_row = mysql_fetch_array($search_statussen_probleem_result))
+			while($search_statussen_probleem_row = mysqli_fetch_array($search_statussen_probleem_result))
 			{
 				?>
 				

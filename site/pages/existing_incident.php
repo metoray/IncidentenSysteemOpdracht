@@ -1,11 +1,9 @@
 <?php
-//include "connect.php";
-$connect			=new mysqli('localhost', 'root', '', 'rick_hondsrug');
-$db =mysql_select_db( "rick_hondsrug");
-//$current_incident 	= $_GET["inc_id"];
-$current_incident 	=3004;
+
+iinclude "include/connect.php";
+$current_incident 	= $_GET["inc_id"];
 $search_current 	= "select * from incidenten where inc_id = ".$current_incident."";
-$current_result 	= mysqli_query($connect,$search_current) or die(mysql_error());
+$current_result 	= mysqli_query($con,$search_current) or die(mysql_error());
 $current_row 		= mysqli_fetch_row($current_result);
 
 
@@ -16,7 +14,7 @@ $current_row 		= mysqli_fetch_row($current_result);
 		<?php
 	
 			$search_practitoner = "select naam from gebruikers where ".$current_row[12]."";
-			$practitoner_result = mysqli_query($connect,$search_practitoner) or die(mysql_error());
+			$practitoner_result = mysqli_query($con,$search_practitoner) or die(mysql_error());
 			$practitoner = mysqli_fetch_row($practitoner_result);
 			echo "<br />";
 			echo "behandelaar:";
@@ -26,7 +24,7 @@ $current_row 		= mysqli_fetch_row($current_result);
 		
 
 			$search_statussen_incidenten = "select * from statussen_incident where id=".$current_row[7]."";
-			$search_statussen_incidenten_result = mysqli_query($connect, $search_statussen_incidenten) or die(mysql_error());
+			$search_statussen_incidenten_result = mysqli_query($con, $search_statussen_incidenten) or die(mysql_error());
 			
 			while($search_statussen_incidenten_row = mysqli_fetch_array($search_statussen_incidenten_result))
 			{	
