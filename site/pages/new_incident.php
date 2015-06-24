@@ -11,7 +11,8 @@
 	$text = "";
 	if(isset($_SESSION['answers'])){
 		$list = AnswerList::fromArray(0,$_SESSION['answers']);
-		$text = $list -> getTemplate() -> getText();
+		$template = $list -> getTemplate();
+		if($template) $text = $template -> getText();
 		echo $list -> render();
 	}
 
