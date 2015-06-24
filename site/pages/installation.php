@@ -83,8 +83,7 @@ s=search a= all hardware s=and software*/
         array_push($installed, $spn_step3[0]);
     };
     echo "</select> ";  //sluit de select menu af
-      echo "<br />"; 	
-    
+    echo "<br />"; 	
 ?>  
 	<input type="hidden" name="installation" value="<?php echo $identification_code; ?>"	>  
 	<input type="submit" name="remove_program" value = "'     >       '">
