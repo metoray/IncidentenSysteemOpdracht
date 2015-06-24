@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	
 		$description = mysqli_real_escape_string($_POST["description"]);
 		$start_date = date("Y-m-d") ;
-		$employee = mysql_real_escape_string($_POST["practitioner"]);
-		$status = mysql_real_escape_string($_POST["status"]);
+		$employee = mysqli_real_escape_string($_POST["practitioner"]);
+		$status = mysqli_real_escape_string($_POST["status"]);
 		$insert_new_problem = "insert into probleem(id,status, beschrijving, begindatum, medewerker) VALUES(".$ID.",".$status." ,'".$description."'	, '".$start_date."', ".$employee." )";
 		mysqli_query($con, $insert_new_problem ) or die(mysql_error()); 
 		$location = "Location: existing_problem.php?problem_id=".$ID."";
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 	elseif(isset($_POST["edit_problem"]))
 	{	
-	 	$description = mysql_real_escape_string($_POST["description"]);
+	 	$description = mysqli_real_escape_string($_POST["description"]);
 	 	$employee = mysql_real_escape_string($_POST["practitioner"]);
 		$status = mysql_real_escape_string($_POST["status"]);
 		$solution = mysql_real_escape_string($_POST["solution"]);
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			VALUES 
 			(".$id."			, '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
 			mysqli_query($con,$insert_incident);
-			$location= "Location: existing_incident.php?inc_id=".$id." ";
+			$location= "Location:  /incidents/existing??inc_id=".$id." ";
 			header($location);
 	} 
 	elseif(isset($_POST["send_incident_practioner"]))
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			VALUES 
 			(".$id."		, '".$discription."', ".$user."		,".$software."		,2			,".$impact.",".$urgentie."	,".$prioriteit.",".$hardware."	,".$employee." )";
 			mysqli_query($con,$insert_incident);
-			$location= "Location: existing_incident.php?inc_id=".$id." ";
+			$location= "Location: /incidents/existing?inc_id=".$id." ";
 			header($location);
 	}
 	else

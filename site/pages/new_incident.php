@@ -14,7 +14,7 @@
 	 	{
 			echo "Gebruiker : ".$user_row[1];
 			?>
-			<form action="process.php" method="post" id="send_incident_user">
+			<form action="/process/robert" method="post" id="send_incident_user">
 			<?php
 			$hardware_query = "select hardware_id, identificationcode from hardwarecomponenten where (soort_id =3 or soort_id=4 or soort_id=8 or soort_id = 9) order by locatie_id ";
 			$hardware_result= mysqli_query($con,$hardware_query);
@@ -54,7 +54,7 @@
 		{
 			
 			?>
-			<form action="process.php" method="post" id="send_incident_practioner">
+			<form action="/process/robert" method="post" id="send_incident_practioner">
 			
 			<?php
 			echo "Gebruiker			";

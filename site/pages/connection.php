@@ -8,7 +8,7 @@ include "include/connect.php";
 $identification_code="";
 if(isset($_GET["identification_code"]))
 {
-	$identification_code = mysql_real_escape_string($_GET["identification_code"]);
+	$identification_code = mysqli_real_escape_string($con,$_GET["identification_code"]);
 }
 else
 {
@@ -19,8 +19,8 @@ echo "<br >";
 echo $identification_code;
 $sis_step1 = "select hardware_id,soort_id, locatie_id  from hardwarecomponenten where identificationcode = '".$identification_code."' ";
 
-$sis_step2 = mysql_query($sis_step1);
-$sis_step3 = mysql_fetch_row($sis_step2);  
+$sis_step2 = mysqli_query($con,$sis_step1);
+$sis_step3 = mysqli_fetch_row($sis_step2);  
 // Er zou maar 1 resultaat van moeten komen. 
 
 //Dit verwerkt een post als die er is. Het moet na de sis_set3 komen zodat de goede hardware_id kan worden gebruikt.
@@ -29,21 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if(isset($_POST["verwijder_van_verbindingen"]))
 	{
 	 	$query = "delete from verbindingen where hardware_id1 = ".mysql_real_escape_string($sis_step3[0])." and hardware_id2 = ".mysql_real_escape_string($_POST["verwijder_van_verbindingen"])." ";
-		mysql_query($query) or die(mysql_error());
+		mysqli_query($con,$query) or die(mysql_error());
 		$query = "delete from verbindingen where hardware_id1 = ".mysql_real_escape_string($_POST["verwijder_van_verbindingen"])." and hardware_id2 = ".mysql_real_escape_string($sis_step3[0])." ";
-		mysql_query($query)or die(mysql_error());
+		mysqli_query($con, $query)or die(mysql_error());
 		
 	}
 	if(isset($_POST["toevoegen_aan_verbindgen"]))
 	{
 		$query = "insert into verbindingen VALUES(".mysql_real_escape_string($sis_step3[0])." , ".mysql_real_escape_string($_POST["toevoegen_aan_verbindgen"])." )";
-		mysql_query($query)or die(mysql_error());
+		mysqli_query($con,$query)or die(mysql_error());
 		
 	}
 }; 
 
 ?>
-	<!-- CSS zodat de select menuën naast elkaar staan. -->
+	<!-- CSS zodat de select menu�n naast elkaar staan. -->
 	<style>
 	form
  	{
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
  	}  
 	</style>
 	
-	<form action="connection.php" method="post" name="verbonden">
+	<form action="/cmdb/hardware/connection" method="post" name="verbonden">
 	<select size ="30"  name="verwijder_van_verbindingen">
         	
 <?php	
@@ -66,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$component = "SELECT * FROM verbindingen RIGHT JOIN hardwarecomponenten ON hardware_id1 = hardware_id where hardware_id =  ".$sis_step3[0]." AND (
 					hardware_id1 =".$sis_step3[0]." OR hardware_id2 =".$sis_step3[0].") order by hardware_id2 ";
 			
-	$component2 = mysql_query($component);
+	$component2 = mysqli_query($con,$component);
 
-	while($row = mysql_fetch_assoc($component2)) 
+	while($row = mysqli_fetch_assoc($component2)) 
 	{ 
     	
         // scq = search connection query 
@@ -88,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		}
         
         //Vervolgens worden ze allemaal in de opties gezet van apparaten die verbonden zijn in de select menu staan.
-        $scq_step2 = mysql_query($scq_step1);
-		$scq_step3 = mysql_fetch_row($scq_step2);
+        $scq_step2 = mysqli_query($con,$scq_step1);
+		$scq_step3 = mysqli_fetch_row($scq_step2);
 			
         ?>
         <option value = <?php echo $scq_step3[0]; ?> > <?php echo $scq_step3[1]; ?>   </option>
@@ -125,12 +125,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$not_connected  = $not_connected.$not;
 	} 
 	$ncbc_query = $not_connected;
-	$ncbc_result = mysql_query($ncbc_query) or die(mysql_error()); //resultaat = elke hardwarecomponent die niet verbonden is met de huidige hardware. Dit gaat er wel van uit dat de hardwarecomponent verbinding kan maken 
+	$ncbc_result = mysqli_query($con,$ncbc_query) or die(mysql_error()); //resultaat = elke hardwarecomponent die niet verbonden is met de huidige hardware. Dit gaat er wel van uit dat de hardwarecomponent verbinding kan maken 
 //	met meerdere apparaten 
 	
 ?>
 	
-	<form action="connection.php" method="post" name="niet_verbonden">
+	<form action="/cmdb/hardware/connection" method="post" name="niet_verbonden">
 	<select size ="30"  name="toevoegen_aan_verbindgen">
 <?php
 
@@ -165,8 +165,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				{
 				 	//Deze if statement is om te controleren dat we niet een pc aan de switch aansluiten die met andere router/switch is verbonden  
 					$pc_connect = "select * from verbindingen where hardware_id1 = ".$ncbc_rows[0]." or hardware_id2 = ".$ncbc_rows[0]." ";
-					$pc_connect2= mysql_query($pc_connect);
-					$num_rows = mysql_num_rows($result);
+					$pc_connect2= mysqli_query($pc_connect);
+					$num_rows = mysqli_num_rows($con,$result);
 					if($num_rows == 0)
 					{		
 						?>
@@ -189,8 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				{
 				 	//Deze if statement is om te controleren dat we niet een pc aan de switch aansluiten die met andere router/switch is verbonden  
 					$pc_connect = "select * from verbindingen where hardware_id1 = (".$ncbc_rows[0]." or hardware_id2 = ".$ncbc_rows[0].") ";
-					$pc_connect2= mysql_query($pc_connect);
-					$num_rows_router = mysql_num_rows($pc_connect2);
+					$pc_connect2= mysqli_query($pc_connect);
+					$num_rows_router = mysqli_num_rows($pc_connect2);
 					if($num_rows_router != 0)
 					{		
 						?>
@@ -213,22 +213,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if($sis_step3[1] == 6 ||	$sis_step3[1] == 7)
 	{
 		//buiten locatie hardwarecomponenten = blh
-		$😨="select * from hardwarecomponenten  where soort_id = 6 or soort_id = 7  ";
+		$blh_query="select * from hardwarecomponenten  where soort_id = 6 or soort_id = 7  ";
 		foreach($connected as $connect)
 		{
 		
 			$not = " and !(hardware_id = ".$connect.")";
 		
-			$😨  = $😨.$not;
+			$blh_query  = $blh_query.$not;
 		} 
-		$blh_result= mysql_query($😨);
-		while($blh_rows = mysql_fetch_row($blh_result))
+		$blh_result= mysqli_query($con,$blh_query);
+		while($blh_rows = mysqli_fetch_row($blh_result))
 		{
 			if($blh_rows[0] !=  $sis_step3[0])
 			{
 		 	$check_if_connected = "SELECT * FROM verbindingen RIGHT JOIN hardwarecomponenten ON hardware_id1 = hardware_id where hardware_id =  ".$sis_step3[0]." AND !(
 					hardware_id1 =".$sis_step3[0]." OR hardware_id2 =".$sis_step3[0].") ) order by hardware_id2";
-			$check_if_connected_result = mysql_query($check_if_connected);
+			$check_if_connected_result = mysqli_query($con,$check_if_connected);
 			$count_connections = mysql_num_rows($check_if_connected_result);
 			if($count_connections == 0)
 			{
