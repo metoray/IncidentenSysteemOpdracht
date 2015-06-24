@@ -21,7 +21,7 @@
 
 
 	//Tabel wordt gemaakt met kolomnamen.
-	echo "<table border=1><tr><td><b>Identificatiecode</b></td><td><b>Soort hardware</b></td><td><b>Locatie</b></td><td><b>Merk</b></td></td><td><b>Leverancier</b></td></td><td><b>Aanschaf datum</b></td></td></tr>";
+	echo "<table border=1><tr><td><b>Identificatiecode</b></td><td><b>Soort hardware</b></td><td><b>Locatie</b></td><td><b>Merk</b></td></td><td><b>Leverancier</b></td></td><td><b>Aanschaf datum TEST</b></td></td></tr>";
 
 	foreach ($Hardware as $i) {
 		echo "<tr><td><a href=\"installation.php?=". $i['HardwareId']. "\">". $i['Identificatiecode']. "</a></td><td>". $i['SoortHardware']. "</td><td>". $i['Locatie']. "</td><td>". $i['MerkNaam']. "</td></td><td>". $i['LeverancierNaam']. "</td></td><td>". $i['JaarVanAanschaf']. "</td></td></tr>";
