@@ -4,7 +4,7 @@
 	//Query voor de gegevens van de incidenten tabel op te halen.
 	$query = "SELECT * ";
 	$query .= "FROM incidenten";
-	$query .= " WHERE gebruiker_id = ".$_SESSION["user"]->id ;
+	$query .= " WHERE gebruiker_id = ".$_SESSION["user"]->getID() ;
 
 	
 	//Zet de resultaten van query incidenten tabel in variabel.
@@ -17,7 +17,7 @@
 	}
 
 	//Tabel wordt gemaakt met kolomnamen.
-	echo "<table border=1><tr><td><b>Gebruiker</b></td><td><b>Behandelaar</b></td><td><b>Omschrijving</b></td><td><b>Impact</b></td><td><b>Urgentie</b></td><td><b>Prioriteit</b></td><td><b>Status</b></td><td><b>Start datum + tijd</b></td><td><b>Eind datum + tijd</b></td></tr>";
+	echo "<table class=\"table table-striped\"><thead><tr><th>Gebruiker</th><th>Behandelaar</th><th>Omschrijving</th><th>Impact</th><th>Urgentie</th><th>Prioriteit</th><th>Status</th><th>Start datum + tijd</th><th>Eind datum + tijd</th></tr></thead>";
 
 	echo "<form action=\"#\" method=\"GET\">";
 	foreach ($incidenten as $i) {
@@ -63,6 +63,7 @@
 
 		echo "<tr><td>". "<a href=\"incidentinformation.php?IncidentId=". $i['IncidentId']. "\">" . $i['IncidentId']."</a>"."</td><td>". $Gebruikernaam. "</td><td>". $Medewerkernaam. "</td><td>". $i['Omschrijving']. "</td><td>". $i['Impact']. "</td><td>". $i['Urgentie']. "</td><td>". $i['Prioriteit']. "</td><td>". $i['status']. "</td><td>". $i['StartDatum']. "</td><td>". $i['EindDatum']. "</td></tr>";
 	}
+	echo "</table>";
 
 
 ?>

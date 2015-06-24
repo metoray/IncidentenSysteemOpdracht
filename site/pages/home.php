@@ -17,12 +17,13 @@ while ($incidenten_query = mysqli_fetch_assoc($result)) {
     $incidenten[] = array('IncidentId' => intval($incidenten_query["inc_id"]), 'StartDatum' => $incidenten_query["start_incident"], 'Omschrijving' => $incidenten_query["Omschrijving"],'status' => $incidenten_query["status"]);
 }
 
-echo "<table border=1><tr><td><b>Incident ID</b></td><td><b>Omschrijving</b></td><td><b>Aanmeld datum</b></td><td><b>Status</b></td></tr>";
+echo "<table class=\"table table-striped\"><thead><tr><th>Incident ID</th><th>Omschrijving</th><th>Aanmeld datum</th><th>Status</th></tr></thead>";
 
 foreach ($incidenten as $i) {
     echo"<tr><td>". "<a href=\"incidentinformation.php?IncidentId=". $i['IncidentId']. "\">" . $i['IncidentId']."</a>"."</td><td> ". $i['Omschrijving']."</td><td>". $i['StartDatum']."</td><td>". $i['status']."</td></tr>";
 }
-    
+
+echo "</table>";
 ?>
 
     <!-- Bootstrap -->

@@ -15,7 +15,7 @@
 	}
 
 	//Tabel wordt gemaakt met kolomnamen.
-	echo "<table border=1><tr><td><b>Gebruiker</b></td><td><b>Behandelaar</b></td><td><b>Omschrijving</b></td><td><b>Impact</b></td><td><b>Urgentie</b></td><td><b>Prioriteit</b></td><td><b>Status</b></td><td><b>Start datum + tijd</b></td><td><b>Eind datum + tijd</b></td><td><b>Toevoegen aan probleem</b></td></tr>";
+	echo "<table class=\"table table-striped\"><thead><tr><th>Gebruiker</th><th>Behandelaar</th><th>Omschrijving</th><th>Impact</th><th>Urgentie</th><th>Prioriteit</th><th>Status</th><th>Start datum + tijd</th><th>Eind datum + tijd</th><th>Toevoegen aan probleem</th></tr></thead>";
 
 	echo "<form action=\"#\" method=\"GET\">";
 	foreach ($incidenten as $i) {
@@ -64,5 +64,5 @@
 
 	echo "</table>";
 	echo "<input type=\"submit\" value=\"Toevoegen aan problemen\" name=\"Toevoegen\">";
-	echo "</from>";
+	echo "</form>";
 ?>
