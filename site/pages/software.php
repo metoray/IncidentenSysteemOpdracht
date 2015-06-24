@@ -18,7 +18,7 @@
 
 
 	//Tabel wordt gemaakt met kolomnamen.
-	echo "<table border=1><tr><td><b>Identificatiecode</b></td><td><b>Soort software</b></td><td><b>Serverlicentie</b></td><td><b>Aantal server licenties</b></td></td><td><b>Gebruiker licenties</b></td></td><td><b>Producent</b></td></td><td><b>Leverancier</b></td></tr>";
+	echo '<table class="table table-striped"><thead><tr><th>Identificatiecode</td><th>Soort software</td><th>Serverlicentie</td><th>Aantal server licenties</td></td><th>Gebruiker licenties</td></td><th>Producent</td></td><th>Leverancier</td></thead></tr>';
 
 	foreach ($software as $i) {
 		echo "<tr><td>". $i['Identificatiecode']. "</td><td>". $i['SoortSoftware']. "</td><td>". $i['Serverlicentie']. "</td><td>". $i['ServerLicentieAantal']. "</td></td><td>". $i['GebruikerLicenties']. "</td></td><td>". $i['Producent']. "</td></td><td>". $i['LeverancierNaam']. "</td></tr>";
