@@ -83,10 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$discription 	=$_POST["description"];	
 			$software 		=$_POST["software"];
 			$hardware 		=$_POST["hardware"];
-			$start_inc			=date("Y-m-d H:i:s") ;
+			$start_inc		=date("Y-m-d H:i:s") ;
 			
 			$insert_incident = "insert into incidenten
-			(		 omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
+			(		 omschrijving, start_incident			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
 			(			 '".$discription."','".$start_inc."', ".$user."		,".$software."		,1			,{$impact},{$urgency}	,{$priority},".$hardware."	,NULL )";
 			mysqli_query($con,$insert_incident);
