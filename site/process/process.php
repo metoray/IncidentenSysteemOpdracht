@@ -61,7 +61,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 	elseif(isset($_POST["send_incident_user"]))
 	{
-	 	
+	 		$impact = "NULL";
+	 		$urgency = "NULL";
+	 		$priority = "NULL";
+
+	 		if(isset($_SESSION['answers'])){
+	 			$list = AnswerList::fromArray(0,$_SESSION['answers']);
+				$template = $list -> getTemplate();
+				if($template){
+					$impact = $template -> getImpact();
+					$urgency = $template -> getUrgency();
+					$priority = $template -> getPriority();
+				}
+	 		}
+
+	 		$impact = mysqli_real_escape_string($con,$impact);
+	 		$urgency = mysqli_real_escape_string($con,$urgency);
+	 		$priority = mysqli_real_escape_string($con,$priority);
+
 			$user			=$_POST["user"];
 			$discription 	=$_POST["description"];	
 			$software 		=$_POST["software"];
@@ -74,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$insert_incident = "insert into incidenten
 			(inc_id				, omschrijving			, gebruiker_id	,software_component	,status		,impact		,urgentie		,prioriteit		,hardware_id	,medewerker_id)
 			VALUES 
-			(".$id."			, '".$discription."', ".$user."		,".$software."		,1			,NULL,NULL	,NULL,".$hardware."	,NULL )";
+			(".$id."			, '".$discription."', ".$user."		,".$software."		,1			,{$impact},{$urgency},{$priority},".$hardware."	,NULL )";
 			mysqli_query($con,$insert_incident);
 			$location= "Location:  /incidents/existing??inc_id=".$id." ";
 			header($location);
