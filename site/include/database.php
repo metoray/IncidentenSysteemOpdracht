@@ -5,7 +5,7 @@ ini_set('display_startup_errors',1);
 error_reporting(-1);
 try{
 	list($user, $pw) = explode(':',file_get_contents(dirname(__FILE__)."/db.cfg"));
-	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', $user, $pw);
+	$db = new PDO('mysql:host=localhost;dbname=rick_hondsrug;charset=utf8', $user, $pw, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch(PDOException $ex){
@@ -672,13 +672,71 @@ class IncidentTemplate{
 		return $this->desc;
 	}
 
+	public function setText($text){
+		$this->desc = $text;
+	}
+
+	public function getImpact(){
+		return $this->impact;
+	}
+
+	public function setImpact($impact){
+		return $this->impact;
+	}
+
+	public function getUrgency(){
+		return $this->impact;
+	}
+
+	public function setUrgency($urgency){
+		return $this->urgency;
+	}
+
+	public function getPriority(){
+		return $this->priority;
+	}
+
+	public function setPriority($priority){
+		return $this->priority;
+	}
+
+	public function delete(){
+		global $db;
+		$stmt = $db -> prepare('DELETE FROM standaard_incident WHERE id=:id');
+		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+		$stmt -> execute();
+		$this -> id = null;
+	}
+
+	public function save(){
+		global $db;
+		if($this->id === null){
+			$stmt = $db -> prepare('INSERT INTO standaard_incident (omschrijving,impact,urgentie,prioriteit) VALUES (:desc,:impact,:urgency,:priority)');
+			$stmt -> bindValue('desc', $this->desc, PDO::PARAM_STR);
+			$stmt -> bindValue('impact', $this->impact, PDO::PARAM_INT);
+			$stmt -> bindValue('urgency', $this->urgency, PDO::PARAM_INT);
+			$stmt -> bindValue('priority', $this->priority, PDO::PARAM_INT);
+			$stmt -> execute();
+			$this->id = $db -> lastInsertId();
+		}
+		else{
+			$stmt = $db -> prepare('UPDATE standaard_incident SET omschrijving=:desc, impact=:impact, urgentie=:urgency, prioriteit=:priority WHERE id=:id;');
+			$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
+			$stmt -> bindValue('desc', $this->desc, PDO::PARAM_STR);
+			$stmt -> bindValue('impact', $this->impact, PDO::PARAM_INT);
+			$stmt -> bindValue('urgency', $this->urgency, PDO::PARAM_INT);
+			$stmt -> bindValue('priority', $this->priority, PDO::PARAM_INT);
+			$stmt -> execute();
+		}
+	}
+
 	public static function fromID($id){
 		global $db;
 		$stmt = $db -> prepare('SELECT * FROM standaard_incident WHERE id=:id;');
 		$stmt -> bindValue('id', $id, PDO::PARAM_INT);
 		$stmt -> execute();
 		$row = $stmt -> fetch(PDO::FETCH_ASSOC);
-		return new IncidentTemplate($row['beschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
+		return new IncidentTemplate($row['omschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
 	}
 
 	public static function getAll(){
@@ -687,7 +745,7 @@ class IncidentTemplate{
 		$stmt = $db -> prepare('SELECT * FROM standaard_incident;');
 		$stmt -> execute();
 		while($row = $stmt -> fetch(PDO::FETCH_ASSOC)){
-			$questions[] = new IncidentTemplate($row['beschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
+			$questions[] = new IncidentTemplate($row['omschrijving'],$row['impact'],$row['urgentie'],$row['prioriteit'],$row['id']);
 		}
 		return $questions;
 	}
