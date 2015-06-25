@@ -1,7 +1,6 @@
 <?php
 if(isset($_GET['a'])){
 	$answer = Answer::fromID($_GET['a']);
-	print_r($answer);
 	if($answer){
 		$_SESSION['answers'][] = $answer;
 		if($answer->getNext()){
