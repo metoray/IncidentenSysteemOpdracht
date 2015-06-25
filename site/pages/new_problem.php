@@ -5,7 +5,7 @@ $practitoner_result = mysqli_query($con,$search_practitoner) or die(mysql_error(
 ?>
 <html>
 	<body>
-		<form name="/process/robert" action= "process.php" method="POST" id="new_problem">
+		<form name="new_problem" action= "/process/robert" method="POST" id="new_problem">
 		<br />
 		Behandelaar:<select name="practitioner">
 		
