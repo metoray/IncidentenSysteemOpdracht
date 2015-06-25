@@ -37,7 +37,7 @@ while($problems_row = mysqli_fetch_assoc($problems_result )	)
 {
 	echo "<tr>";
 		echo "<td>";
-			echo "<a href=existing_problem.php?problem_id=".$problems_row["id"].">	";
+			echo "<a href=/problems/list/problem?problem_id=".$problems_row["id"].">	";
 			echo $problems_row["id"];	
 			echo "</a>";
 		echo "</td>";

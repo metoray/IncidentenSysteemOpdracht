@@ -219,6 +219,25 @@
 	}
 
 
+	//Alle antwoorden met het id van huidig incident worden opgehaald.
+	$query = "SELECT * ";
+	$query .= "FROM gebruikers_antwoorden ";
+	$query .= "WHERE inc_id = ". $_GET["incidentid"]. " ";
+	
+	//Zet de resultaten van query in variabel.
+	$result = mysqli_query($con, $query);
+
+	//Wordt gekeken of query werkt.
+	if (!$result) {
+		die("Query werkt niet");
+	}
+
+	//Zet de resultaten van de query in een associative array.
+	while ($antwoorden_query = mysqli_fetch_assoc($result)) {
+		$antwoorden[] = array('Id' => intval($antwoorden_query["id"]), 'AntwoordId' => intval($antwoorden_query["antwoord_id"]), 'IncidentId' => intval($antwoorden_query["inc_id"]), 'ReeksNummer' => intval($antwoorden_query["reeks_nummer"]));
+	}
+
+
 	//Controleert waar gegevens niet van beschikbaar zijn.
 	if (empty($incidenten['GebruikerNaam'])) {
 		$incidenten['GebruikerNaam'] = "Geen gebruiker.";
@@ -338,11 +357,11 @@
 	}
 	echo "</td>";
 
-	//Start Datum
-	echo "<td><b>Start datum:</b></td><td>". $incidenten['StartDatum']. "</td></tr>";
+	//Start Datum + tijd
+	echo "<td><b>Start datum: + tijd</b></td><td>". $incidenten['StartDatum']. "</td></tr>";
 
-	//Eind Datum
-	echo "<tr><td></td><td></td><td><b>Eind datum:</b></td><td><input type=\"text\" name=\"einddatum\" value=\"". $incidenten['EindDatum']. "\"></td>";
+	//Eind Datum + tijd
+	echo "<tr><td></td><td></td><td><b>Eind datum + tijd:</b></td><td><input type=\"text\" name=\"einddatum\" value=\"". $incidenten['EindDatum']. "\"></td>";
 	echo "</table>";
 
 	echo "</br>";
@@ -360,18 +379,13 @@
 	echo "</table>";
 	echo "</br>";
 
-	//Tabel voor de gekoppelde vragen
-	echo "<table>";
-
 	$answers = AnswerList::fromIncident($_GET["incidentid"]);
 	$aText = $answers -> render();
 
 	if($aText){
-		echo "Vragen<br/>";
+		echo "<b>Vragen:</b><br/>";
 		echo $aText;
 	}
-
-	echo "</table>";
 
 	echo "</br>";
 
