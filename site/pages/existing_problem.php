@@ -109,7 +109,7 @@ $practitoner_result = mysqli_query($con, $search_practitoner) or die(mysql_error
 		{
 		 	echo "<tr>";
 		 		echo "<td>";
-						echo "<a href=incident.php?hardware_id=".$inc_rows[0]."> ".$inc_rows[0]."	</a>";
+						echo "<a href=/incidents/existing?inc_id=".$inc_rows[0]."> ".$inc_rows[0]."	</a>";
 				echo "</td>";
 		 		echo "<td>";
 					echo $inc_rows[1] ;
