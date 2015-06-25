@@ -219,6 +219,25 @@
 	}
 
 
+	//Alle antwoorden met het id van huidig incident worden opgehaald.
+	$query = "SELECT * ";
+	$query .= "FROM gebruikers_antwoorden ";
+	$query .= "WHERE inc_id = ". $_GET["incidentid"]. " ";
+	
+	//Zet de resultaten van query in variabel.
+	$result = mysqli_query($con, $query);
+
+	//Wordt gekeken of query werkt.
+	if (!$result) {
+		die("Query werkt niet");
+	}
+
+	//Zet de resultaten van de query in een associative array.
+	while ($antwoorden_query = mysqli_fetch_assoc($result)) {
+		$antwoorden[] = array('Id' => intval($antwoorden_query["id"]), 'AntwoordId' => intval($antwoorden_query["antwoord_id"]), 'IncidentId' => intval($antwoorden_query["inc_id"]), 'ReeksNummer' => intval($antwoorden_query["reeks_nummer"]));
+	}
+
+
 	//Controleert waar gegevens niet van beschikbaar zijn.
 	if (empty($incidenten['GebruikerNaam'])) {
 		$incidenten['GebruikerNaam'] = "Geen gebruiker.";
@@ -338,11 +357,11 @@
 	}
 	echo "</td>";
 
-	//Start Datum
-	echo "<td><b>Start datum:</b></td><td>". $incidenten['StartDatum']. "</td></tr>";
+	//Start Datum + tijd
+	echo "<td><b>Start datum: + tijd</b></td><td>". $incidenten['StartDatum']. "</td></tr>";
 
-	//Eind Datum
-	echo "<tr><td></td><td></td><td><b>Eind datum:</b></td><td><input type=\"text\" name=\"einddatum\" value=\"". $incidenten['EindDatum']. "\"></td>";
+	//Eind Datum + tijd
+	echo "<tr><td></td><td></td><td><b>Eind datum + tijd:</b></td><td><input type=\"text\" name=\"einddatum\" value=\"". $incidenten['EindDatum']. "\"></td>";
 	echo "</table>";
 
 	echo "</br>";
@@ -360,13 +379,68 @@
 	echo "</table>";
 	echo "</br>";
 
-	//Tabel voor de gekoppelde vragen
+	//Tabel voor de gekoppelde vragen en antwoorden
+	echo "<h1>Gekoppelde vragen met bijbehorende antwoorden.</h1>";
 	echo "<table>";
+	echo "</br>";
 
-	//Vragen
-	echo "<tr><td>Vragen:</td></tr>";
-	echo "<tr><td><input type=\"text\" name=\"vragen\" value=\"Vragen stuk moet nog gemaakt worden. Kan allemaal later!\"></td></tr>";
+	//Vragen en antwoorden
+	$teller = 1;
+	if (empty($antwoorden)) {
+		echo "<tr><td>Geen gekoppelde vragen en antwoorden.</td></tr>";
+	}
+	else{
+		foreach ($antwoorden as $i) {
+			
+			//Antwoord met id van $antwoorden wordt opgehaald.
+			$query = "SELECT * ";
+			$query .= "FROM antwoord ";
+			$query .= "WHERE id = ". $i['Id']. " ";
+			
+			//Zet de resultaten van query in variabel.
+			$result = mysqli_query($con, $query);
 
+			//Wordt gekeken of query werkt.
+			if (!$result) {
+				die("Query werkt niet");
+			}
+
+			//Zet de resultaten van de query in een associative array.
+			while ($antwoord_query = mysqli_fetch_assoc($result)) {
+				$antwoord = array('Id' => intval($antwoord_query["id"]), 'VraagId' => intval($antwoord_query["vraag_id"]), 'Tekst' => $antwoord_query["tekst"], 'VervolgId' => intval($antwoord_query["vervolg_vraag_id"]), 'TicketId' => intval($antwoord_query["default_ticket_id"]));
+			}
+
+			//Vraag met VraagId van $antwoorden wordt opgehaald.
+			$query = "SELECT * ";
+			$query .= "FROM vraag ";
+			$query .= "WHERE id = ". $antwoord['VraagId']. " ";
+			
+			//Zet de resultaten van query in variabel.
+			$result = mysqli_query($con, $query);
+
+			//Wordt gekeken of query werkt.
+			if (!$result) {
+				die("Query werkt niet");
+			}
+
+			//Zet de resultaten van de query in een associative array.
+			while ($vraag_query = mysqli_fetch_assoc($result)) {
+				$vraag = array('Id' => intval($vraag_query["id"]), 'Tekst' => $vraag_query["tekst"], 'Beschrijving' => $vraag_query["beschrijving"]);
+			}
+
+			echo "<tr><td><b>Vraag $teller:</b></td><td>";
+			echo $vraag['Tekst'];
+			echo "</td></tr>";
+			echo "<tr><td><b>Antwoord $teller:</b></td><td>";
+			echo $antwoord['Tekst'];
+			echo "</td></tr>";
+			echo "<tr><td></br></td><td></td></tr>";
+
+			$teller++;
+
+		}
+	}
+	
 	echo "</table>";
 
 	echo "</br>";
