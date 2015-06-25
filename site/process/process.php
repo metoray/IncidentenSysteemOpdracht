@@ -6,32 +6,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
  	if(isset($_POST["new_problem"]))
  	{	
 	
- 		$get_max_id = "select max(id) from probleem ";
+ 	
+ 		
+		$description = mysqli_real_escape_string($con,$_POST["description"]);
+		$start_date = date("Y-m-d") ;
+		$employee = mysqli_real_escape_string($con,$_POST["practitioner"]);
+		$status = mysqli_real_escape_string($con,$_POST["status"]);
+		$insert_new_problem = "insert into probleem(status, beschrijving, begindatum, medewerker) VALUES(".$status." ,'".$description."'	, '".$start_date."', ".$employee." )";
+		mysqli_query($con, $insert_new_problem ) or die(mysql_error()); 
+		
+		
+		//Dit zoek de meest recente (deze probleem dus) op en zet het in problem_id zo komen we automatisch weer op de goede pagina.
+		$get_max_id = "select max(id) from probleem ";
  		$get_max_id_result =mysqli_query($con,$get_max_id);
  		$ID =mysqli_fetch_row($get_max_id_result);
  		$ID = $ID[0];
  		
- 		if($ID == "")
- 		{ $ID = 1;}
-		else {$ID++; }
-		
-	
-		$description = mysqli_real_escape_string($_POST["description"]);
-		$start_date = date("Y-m-d") ;
-		$employee = mysqli_real_escape_string($_POST["practitioner"]);
-		$status = mysqli_real_escape_string($_POST["status"]);
-		$insert_new_problem = "insert into probleem(id,status, beschrijving, begindatum, medewerker) VALUES(".$ID.",".$status." ,'".$description."'	, '".$start_date."', ".$employee." )";
-		mysqli_query($con, $insert_new_problem ) or die(mysql_error()); 
-		$location = "Location: existing_problem.php?problem_id=".$ID."";
+		$location = "Location: /problems/list/problem?problem_id=".$ID."";
 		header($location);
 	
 	}
 	elseif(isset($_POST["edit_problem"]))
 	{	
-	 	$description = mysqli_real_escape_string($_POST["description"]);
-	 	$employee = mysql_real_escape_string($_POST["practitioner"]);
-		$status = mysql_real_escape_string($_POST["status"]);
-		$solution = mysql_real_escape_string($_POST["solution"]);
+	 	$description = mysqli_real_escape_string($con,	$_POST["description"]);
+	 	$employee = mysqli_real_escape_string($con,		$_POST["practitioner"]);
+		$status = mysqli_real_escape_string($con,		$_POST["status"]);
+		$solution = mysqli_real_escape_string($con,		$_POST["solution"]);
 		$end_date = date("Y-m-d") ;
 		if($status == 3)
 		{
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		}
 		echo $alter_problem;
 		mysqli_query($con,$alter_problem) or die(mysql_error());
-		$location = "Location: existing_problem.php?problem_id=".$_POST["problem_id"]."";
+		$location = "Location: /problems/list/problem?problem_id=".$_POST["problem_id"]."";
 		header($location);
 	
 	}
@@ -57,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$remove_query = "update incidenten set problem_id = null where inc_id= ".$remove_this." ";
 				mysqli_query($con,$remove_query);
 			}
-			header('Location: existing_problem.php');
+			$location = "Location: /problems/list/problem?problem_id=".$_POST["problem_id"]."";
+			header($location);
 	}
 	elseif(isset($_POST["send_incident_user"]))
 	{
@@ -79,10 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	 		$urgency = mysqli_real_escape_string($con,$urgency);
 	 		$priority = mysqli_real_escape_string($con,$priority);
 	 	
-			$user			=$_POST["user"];
-			$discription 	=$_POST["description"];	
-			$software 		=$_POST["software"];
-			$hardware 		=$_POST["hardware"];
+			$user			=mysqli_real_escape_string($con,$_POST["user"]);
+			$discription 	=mysqli_real_escape_string($con,$_POST["description"]);	
+			$software 		=mysqli_real_escape_string($con,$_POST["software"]);
+			$hardware 		=mysqli_real_escape_string($con,$_POST["hardware"]);
 			$start_inc		=date("Y-m-d H:i:s") ;
 			
 			$insert_incident = "insert into incidenten
@@ -107,14 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	elseif(isset($_POST["send_incident_practioner"]))
 	{
 			
-			$discription 	=$_POST["description"];
-			$user_id		=$_POST["user"];
-			$software 		=$_POST["software"];
-			$hardware 		=$_POST["hardware"];
-			$impact 		=$_POST["impact"];
-			$urgentie		=$_POST["urgentie"];
-			$prioriteit 	=$_POST["prioriteit"];
-			$employee 		=$_POST["practioner"];
+			$discription 	=mysqli_real_escape_string($con,$_POST["description"]);
+			$user_id		=mysqli_real_escape_string($con,$_POST["user"]);
+			$software 		=mysqli_real_escape_string($con,$_POST["software"]);
+			$hardware 		=mysqli_real_escape_string($con,$_POST["hardware"]);
+			$impact 		=mysqli_real_escape_string($con,$_POST["impact"]);
+			$urgentie		=mysqli_real_escape_string($con,$_POST["urgentie"]);
+			$prioriteit 	=mysqli_real_escape_string($con,$_POST["prioriteit"]);
+			$employee 		=mysqli_real_escape_string($con,$_POST["practioner"]);
 			$start_inc		=date("Y-m-d H:i:s") ;
 		
 			$insert_incident = "insert into incidenten
