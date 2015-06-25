@@ -7,16 +7,16 @@ $current_row = mysqli_fetch_row($current_result);
 //0 = id 1 = status 2=beschrijving 3=oplossing 4=begindatum 5=einddatum 6=behanadelaar/medewerker
 
 $search_practitoner = "select * from gebruikers where rol_id = 2 or rol_id = 4";
-$practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
+$practitoner_result = mysqli_query($con, $search_practitoner) or die(mysql_error());
 ?>
 <html>
 	<body>
-		<form name="edit_problem" action= "process.php" method="POST" id="edit_problem">
+		<form name="edit_problem" action= "/process/robert" method="POST" id="edit_problem">
 		<br />
 		Behandelaar:<select name="practitioner">
 		
 		<?php
-			while($practitoner_row = mysql_fetch_array($practitoner_result))
+			while($practitoner_row = mysqli_fetch_array($practitoner_result))
 			{
 			 	if($practitoner_row[0] == $current_row[6])
 			 	{
@@ -32,12 +32,15 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 				}
 			}
 			$search_statussen_probleem = "select * from statussen_probleem";
-			$search_statussen_probleem_result = mysql_query($search_statussen_probleem) or die(mysql_error());
+			$search_statussen_probleem_result = mysqli_query($con, $search_statussen_probleem) or die(mysql_error());
 		?>
 		</select>
+		<br />
+		Status:
+		
 		<select name ="status">
 		<?php
-			while($search_statussen_probleem_row = mysql_fetch_array($search_statussen_probleem_result))
+			while($search_statussen_probleem_row = mysqli_fetch_array($search_statussen_probleem_result))
 			{
 			 	if($search_statussen_probleem_row[0] == $current_row[1])
 			 	{
@@ -53,10 +56,15 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 					
 				}
 			}
+			echo "</select>";
+			echo "<br />";
+			echo "Begindatum:	";
+			echo $current_row[4];
+			echo "<br />";
+			echo "Einddatum:		";
+			echo $current_row[5];
+			echo "<br />";
 		?>
-		</select>
-		<br />
-		
 		Beschrijving:
 		<br />
 		<textarea rows="25" cols="100" name="description" form="edit_problem"  ><?php echo	$current_row[2] ?> </textarea>
@@ -65,7 +73,7 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 		<br />
 		<textarea rows="25" cols="100" name="solution" form="edit_problem"  ><?php echo	$current_row[3] ?> </textarea>
 		<br />
-		<input type="hidden" name="problem_id" value="<?php echo $current_problem; ?>"	>
+		<input type="hidden" name="problem_id" value=<?php echo $current_problem; ?>	>
 		<input type="submit" name="edit_problem" value = "Verwerk">
 		</form>
 
@@ -73,8 +81,8 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 </html>
 <?php
 		$search_related_inc = "select * from incidenten where problem_id = ".$current_problem." ";
-		$search_inc= mysql_query($search_related_inc);
-		echo "<form action= process.php name=toremove method=POST>";
+		$search_inc= mysqli_query($con,$search_related_inc);
+		echo "<form action=/process/robert name=toremove method=POST>";
 		echo "<table  border=1> ";
 		echo "<tr>";
 				echo "<td>";
@@ -97,7 +105,7 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 				echo "</td>";
 		echo "</tr>";
 		echo "gerelateerde incidenten:";
-		while($inc_rows= mysql_fetch_row($search_inc))
+		while($inc_rows= mysqli_fetch_row($search_inc))
 		{
 		 	echo "<tr>";
 		 		echo "<td>";
@@ -107,22 +115,22 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 					echo $inc_rows[1] ;
 				echo "</td>";
 				$search_status = "select status from statussen_incident where id = ".$inc_rows[7]." ";
-				$search_status_result = mysql_query($search_status);
-				$status = mysql_fetch_row($search_status_result);
+				$search_status_result = mysqli_query($con,$search_status);
+				$status = mysqli_fetch_row($search_status_result);
 				echo "<td>";
 					echo $status[0] ;
 				echo "</td>";
 				$search_hardware_identification = "select identificationcode from hardwarecomponenten where hardware_id = ".$inc_rows[11]." ";
-				$search_hardware_result = mysql_query($search_hardware_identification);
-				$hardware_identificationcode = mysql_fetch_row($search_hardware_result);
+				$search_hardware_result = mysqli_query($con,$search_hardware_identification);
+				$hardware_identificationcode = mysqli_fetch_row($search_hardware_result);
 				echo "<td>";
-					echo "<a href=installation.php?identification_code=".$hardware_identificationcode[0]."> ".$hardware_identificationcode[0]."	</a>";
+					echo "<a href=/cmdb/hardware/installation?identification_code=".$hardware_identificationcode[0]."> ".$hardware_identificationcode[0]."	</a>";
 				echo "</td>";
 				if(isset($inc_rows[6]))
 				{
 					$search_software_identification = "select identificatiecode from software where software_id = ".$inc_rows[6]." ";
-					$search_software_result = mysql_query($search_software_identification);
-					$software_identificationcode = mysql_fetch_row($search_software_result);
+					$search_software_result = mysqli_query($con,$search_software_identification);
+					$software_identificationcode = mysqli_fetch_row($search_software_result);
 					echo "<td>";
 						echo $software_identificationcode[0] ;
 					echo "</td>";
@@ -134,7 +142,12 @@ $practitoner_result = mysql_query($search_practitoner) or die(mysql_error());
 					echo "</td>";
 				}
 				echo "<td>";
-					?> <input type="checkbox" name="remove[]" value= "<?php echo $inc_rows[0]; ?>" > <?php	
+				echo "<input type=hidden name=problem_id value=".$current_problem.">";
+			
+					
+					?> 	
+						<input type="checkbox" name="remove[]" value= "<?php echo $inc_rows[0]; ?>" > 
+						<?php	
 				echo "</td>";
 			echo "</tr>";
 			echo "<br />";
