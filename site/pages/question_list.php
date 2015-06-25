@@ -1,3 +1,8 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+	Deze vragen leiden naar een aantal standaard incidenten. <a class="btn btn-primary" href="/cmdb/questions/templates">Naar lijst standaardincidenten</a>
+	</div>
+</div>
 <table class="table table-striped">
 	<thead>
 		<tr>

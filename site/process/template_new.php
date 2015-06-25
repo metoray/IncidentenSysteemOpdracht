@@ -13,5 +13,5 @@ if(isset($_POST['impact'],$_POST['urgency'],$_POST['priority'],$_POST['text'])){
 	$template = new IncidentTemplate($text,$imp,$urg,$pri);
 	$template -> save();
 }
-header("Location: /cmdb/templates");
+header("Location: /cmdb/questions/templates");
 ?>

@@ -1,3 +1,8 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+	Dit zijn de standaardincidenten die te bereiken zijn na het invullen van de vragen. <a class="btn btn-primary" href="/cmdb/questions">Ga naar de vragenlijst</a>
+	</div>
+</div>
 <table class="table table-striped">
 	<thead>
 		<tr>
