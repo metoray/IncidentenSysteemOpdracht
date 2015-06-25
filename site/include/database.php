@@ -620,6 +620,9 @@ class Answer{
 
 	public function delete(){
 		global $db;
+		$stmt = $db -> prepare('DELETE FROM gebruikers_antwoorden WHERE antwoord_id=:id;');
+		$stmt -> bindValue('id',$this->id, PDO::PARAM_INT);
+		$stmt -> execute();
 		$stmt = $db -> prepare('DELETE FROM antwoord WHERE id=:id');
 		$stmt -> bindValue('id', $this->id, PDO::PARAM_INT);
 		$stmt -> execute();
