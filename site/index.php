@@ -80,7 +80,7 @@ if($currentPage){
 	</style>
 </head>
 <body>
-	<div class="col-md-2">
+	<div class="col-sm-4 col-md-2">
 		<ul class="nav nav-pills nav-stacked">
 <?php
 function outputMenuItem($page){
@@ -111,7 +111,7 @@ foreach ($root->getSubpages() as $key => $page) {
 ?>
 		</ul>
 	</div>
-	<div class="col-md-10">
+	<div class="col-sm-8 col-md-10">
 		<div class="col-md-6">
 			<h3><?php echo $title; ?></h3>
 		</div>
