@@ -9,7 +9,7 @@
 	$query .= "JOIN soort_hardware ON (hardwarecomponenten.soort_id = soort_hardware.soort_h_id) ";
 	$query .= "JOIN merken ON (hardwarecomponenten.merk_id = merken.merk_id) ";
 	$query .= "JOIN locaties ON (hardwarecomponenten.locatie_id = locaties.locatie_id)";
-	echo $query;
+	
 	
 	//Zet de resultaten van query variabel zetten.
 	$result = mysqli_query($con,$query);
