@@ -15,7 +15,7 @@
 					$error
 				</div>";
 	?>
-	<div class="col-md-2 col-md-offset-5">
+	<div class="col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5">
 		<div class="well well-md" style="margin-top: 100px;">
 			<form action="/process/login.php" method="post">
 				<div class="form-group">
