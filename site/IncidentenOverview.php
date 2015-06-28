@@ -5,7 +5,7 @@
 	//Query voor de gegevens van de incidenten tabel op te halen.
 	$query = "SELECT * ";
 	$query .= "FROM incidenten";
-	
+
 	//Zet de resultaten van query incidenten tabel in variabel.
 	$result = mysqli_query($con,$query);
 
@@ -20,13 +20,13 @@
 	echo "<form action=\"#\" method=\"GET\">";
 	foreach ($incidenten as $i) {
 
-		
+
 		if (!empty($i['GebruikerId'])) {
 			//Query voor de naam van de gebruiker.
 			$query = "SELECT naam ";
 			$query .= "FROM gebruikers ";
 			$query .= "WHERE gebruiker_id = ". $i['GebruikerId'];
-			
+
 			//Zet de resultaten van query.
 			$result = mysqli_query($con,$query);
 
@@ -44,7 +44,7 @@
 			$query = "SELECT naam ";
 			$query .= "FROM gebruikers ";
 			$query .= "WHERE gebruiker_id = ". $i['MedewerkerId'];
-			
+
 			//Zet de resultaten van query.
 			$result = mysqli_query($con,$query);
 
@@ -59,7 +59,7 @@
 
 		$test = $i['IncidentId'];
 
-		echo "<tr><td>". $Gebruikernaam. "</td><td>". $Medewerkernaam. "</td><td>". $i['Omschrijving']. "</td><td>". $i['Impact']. "</td><td>". $i['Urgentie']. "</td><td>". $i['Prioriteit']. "</td><td>". $i['Status']. "</td><td>". $i['StartDatum']. "</td><td>". $i['EindDatum']. "</td><td><input type=\"checkbox\" name=\"" . $i['IncidentId'] . "\" value=\"Escaleer\" />Escaleer</td></tr>";
+		echo "<tr><td>". $Gebruikernaam. "</td><td>". $Medewerkernaam. "</td><td><a href=\"/incidents/open?incidentid={$test}\">". $i['Omschrijving']. "</td><td>". $i['Impact']. "</td><td>". $i['Urgentie']. "</td><td>". $i['Prioriteit']. "</td><td>". $i['Status']. "</td><td>". $i['StartDatum']. "</td><td>". $i['EindDatum']. "</td><td><input type=\"checkbox\" name=\"" . $i['IncidentId'] . "\" value=\"Escaleer\" />Escaleer</td></tr>";
 	}
 
 	echo "</table>";
