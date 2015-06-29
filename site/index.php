@@ -1,30 +1,40 @@
 <?php
+//setup for page
 require_once('include/database.php');
-
 session_start();
 
+//get path components in array
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $path = explode('/', preg_split("/[?#]/",$path)[0]);
 
+//get user in $user variable, redirect to login page if not set
 $user = isset($_SESSION['user'])?$_SESSION['user']:null;
 if($user==null){
 	header('Location: /login.php');
 	die();
 }
+
+//home is default, workaround for faulty .htaccess
 if(count($path)==1 && $path[0] == ""){
 	header('Location: /home');
 	die();
 }
 
+//get all pages of website to construct menu
 $root = Page::getPageStructure();
-$currentPage = $root->find($path);
-$content = "Page not found!";
-$title = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}";
+$currentPage = $root->find($path); //use array path to find current page
+$content = "Page not found!"; //set error message in case page is not found
+$title = "";
+
+//make sure current page exists
 if($currentPage){
 	$fileName = $currentPage->getFile();
 	$title = $currentPage -> getTitle();
+	//make sure page sourcefile exists
 	if(file_exists($fileName)){
+		//check to see if user has access to the current page
 		if($currentPage->hasAccess($_SESSION['user'])){
+			//check to see if current page uses the HTML in this file, include and die otherwise
 			if($currentPage->usesMenu()){
 				ob_start();
 				include($fileName);
@@ -43,12 +53,14 @@ if($currentPage){
 		$content = "Page not found: ".$fileName;
 	}
 }
-
+//start of html
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $title; ?></title>
+	<?php
+	if($title) echo "<title>$title</title>"; // set page title if it has one
+	?>
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -80,7 +92,7 @@ if($currentPage){
 	</style>
 </head>
 <body>
-	<div class="col-sm-4 col-md-2">
+	<div class="col-md-4 col-lg-2">
 		<ul class="nav nav-pills nav-stacked">
 <?php
 function outputMenuItem($page){
@@ -111,7 +123,7 @@ foreach ($root->getSubpages() as $key => $page) {
 ?>
 		</ul>
 	</div>
-	<div class="col-sm-8 col-md-10">
+	<div class="col-md-8 col-lg-10">
 		<div class="col-md-6">
 			<h3><?php echo $title; ?></h3>
 		</div>
