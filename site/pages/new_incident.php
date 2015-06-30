@@ -32,35 +32,39 @@
 			<?php
 			$hardware_query = "select hardware_id, identificationcode from hardwarecomponenten where (soort_id =3 or soort_id=4 or soort_id=8 or soort_id = 9) order by locatie_id ";
 			$hardware_result= mysqli_query($con,$hardware_query);
+			echo "<label>";
 			echo "Hardware";
-			echo "<select name=hardware>";
+			echo "<select class=\"form-control\" name=hardware>";
 			while($hardware_row = mysqli_fetch_row($hardware_result))
 			{
 				echo "<option value=".$hardware_row[0]."> ".$hardware_row[1]."</option>";
 			}
 			
 			echo "</select>";
+			echo "</label>";
 			$software_query = "select software_id, identificatiecode from software ";
 			$software_result= mysqli_query($con,$software_query);
 			echo "<br />";
+			echo "<label>";
 			echo "Software";
-			echo "<select name=software>";
+			echo "<select class=\"form-control\" name=software>";
 			echo "<option value=NULL>Hardware probleem </option>";
 			while($software_row = mysqli_fetch_row($software_result))
 			{
 				echo "<option value=".$software_row[0]."> ".$software_row[1]."</option>";
 			}
 			echo "</select>";
+			echo "</label>";
 			echo "<br />";
 			echo "Beschrijving";
 			echo "<br />";
 			?>
-			<textarea rows="25" cols="100" name="description" form="send_incident_user"  ><?php echo $text; ?></textarea>
+			<textarea class=\"form-control\" rows="25" cols="100" name="description" form="send_incident_user"  ><?php echo $text; ?></textarea>
 			<?php
 			echo "<br />";
 			?>
 		
-			<input type="submit" name="send_incident_user" value = "Verwerk">
+			<input type="submit" class="btn btn-primary" name="send_incident_user" value = "Verwerk">
 			</form>
 			<?php
 		}
@@ -71,22 +75,25 @@
 			<form action="/process/robert" method="post" id="send_incident_practioner">
 			
 			<?php
+			echo "<label>";
 			echo "Gebruiker			";
 			$user_query = "select * from gebruikers";
 			$user_result=mysqLi_query($con,$user_query);
-			echo "<select name=user>";
+			echo "<select class=\"form-control\" name=user>";
 			$test;
 			while($user_row = mysqli_fetch_row($user_result))
 			{
 				echo "<option value=".$user_row[0]."> ".$user_row[1]."</option>";
 				$test = $user_row[0];
 			}
-			echo "</select>"; 	
+			echo "</select>"; 
+			echo "</label>";	
 			echo "<br />";
+			echo "<label>";
 			echo "Behandelaar";
 			$practioner_query = "select * from gebruikers where not rol_id =1 ";
 			$practioner_result=mysqli_query($con,$practioner_query);
-			echo "<select name=practioner>";
+			echo "<select class=\"form-control\" name=practioner>";
 			while($practioner_row = mysqli_fetch_row($practioner_result))
 			{
 			
@@ -100,39 +107,46 @@
 				}
 			}
 			echo "</select>"; 	
+			echo "</label>";
 			echo "<br />";
 			
 			$hardware_query = "select hardware_id, identificationcode from hardwarecomponenten where (soort_id =3 or soort_id=4 or soort_id=8 or soort_id = 9) order by locatie_id ";
 			$hardware_result= mysqli_query($con,$hardware_query);
-			echo "Hardware			";
-			echo "<select name=hardware>";
+			echo "<label>";			
+			echo "Hardware";
+			echo "<select class=\"form-control\" name=hardware>";
 			while($hardware_row = mysqli_fetch_row($hardware_result))
 			{
 				echo "<option value=".$hardware_row[0]."> ".$hardware_row[1]."</option>";
 			}
 			echo "</select>";
+			echo "</label>";
 			$software_query = "select software_id, identificatiecode from software ";
 			$software_result= mysqli_query($con,$software_query);
 			echo "<br />";
-			echo "Software			";
-			echo "<select name=software>";
+			echo "<label>";
+			echo "Software";
+			echo "<select class=\"form-control\" name=software>";
 			echo "<option value=NULL>Hardware probleem </option>";
 			while($software_row = mysqli_fetch_row($con,$software_result))
 			{
 				echo "<option value=".$software_row[0]."> ".$software_row[1]."</option>";
 			}
 			echo "</select>";
+			echo "</label>";
 			echo "<br />";
 			echo "<br />";
 
 			foreach (array('impact'=>$imp,'urgentie'=>$urg,'prioriteit'=>$pri) as $aspect => $default) {
+				echo "<label>";				
 				echo ucfirst($aspect).":";
-				echo "<select name=\"{$aspect}\">";
+				echo "<select class=\"form-control\" name=\"{$aspect}\">";
 				for($x = 1; $x<4; $x++){
 					$selected = ($x==$default)?' selected':'';
 					echo "<option value =".$x."{$selected}> ".$x."</option>";
 				}
-				echo "</select>";	
+				echo "</select>";
+				echo "</label>";	
 			}
 
 			echo "<br />";
@@ -140,12 +154,12 @@
 			echo "<br />";
 			echo "<br />";
 			?>
-				<textarea rows="25" cols="100" name="description" form="send_incident_practioner"  ><?php echo $text; ?></textarea>
+				<textarea class=\"form-control\" rows="25" cols="100" name="description" form="send_incident_practioner"  ><?php echo $text; ?></textarea>
 			<?php
 			echo "<br />";
 			?>
 		
-			<input type="submit" name="send_incident_practioner" value = "Verwerk">
+			<input class="btn btn-primary" type="submit" name="send_incident_practioner" value = "Verwerk">
 			</form>
 			<?php
 		}
